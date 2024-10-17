@@ -100,3 +100,7 @@ class Central:
                 print(f"{fecha_hora} | {tipo} de {emisor} a {receptor} - {detalles}")
         except FileNotFoundError:
             print("No hay camunicaciones registradas")
+            
+            
+            
+print('joniii')
