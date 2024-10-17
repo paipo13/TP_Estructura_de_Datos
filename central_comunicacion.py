@@ -88,13 +88,15 @@ class Central:
         Genera un reporte de las comunicaciones registradas en el archivo CSV.
         """
         comunicaciones = []
+        try:
+            with open('comunicaciones.csv', mode='r') as archivo_csv:
+                lector_csv = csv.reader(archivo_csv)
+                for fila in lector_csv:
+                    comunicaciones.append(fila)
 
-        with open('comunicaciones.csv', mode='r') as archivo_csv:
-            lector_csv = csv.reader(archivo_csv)
-            for fila in lector_csv:
-                comunicaciones.append(fila)
-
-        print("\n--- Reporte de Comunicaciones ---")
-        for comunicacion in comunicaciones:
-            fecha_hora, tipo, emisor, receptor, detalles = comunicacion
-            print(f"{fecha_hora} | {tipo} de {emisor} a {receptor} - {detalles}")
+            print("\n--- Reporte de Comunicaciones ---")
+            for comunicacion in comunicaciones:
+                fecha_hora, tipo, emisor, receptor, detalles = comunicacion
+                print(f"{fecha_hora} | {tipo} de {emisor} a {receptor} - {detalles}")
+        except FileNotFoundError:
+            print("No hay camunicaciones registradas")

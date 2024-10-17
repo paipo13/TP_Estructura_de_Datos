@@ -49,9 +49,14 @@ if __name__ == "__main__":
     telefono1.realizar_llamada("987654321", central)
 
     # Enviar un mensaje y registrar en CSV
+    print(central.dispositivos_registrados)
+    for i in central.dispositivos_registrados:
+        print(i.numero_telefono)
+    #print(type(telefono2.numero_telefono))
     telefono1.enviar_sms("987654321", "Hola, ¿cómo estás?", central)
 
     # Generar un reporte de las comunicaciones
+
     central.generar_reporte_comunicaciones()
 
 
