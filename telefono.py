@@ -26,7 +26,7 @@ class Telefono:
         self.contactos = ListaEnlazada()  # Usamos una lista enlazada para gestionar los contactos
         self.aplicaciones = ListaEnlazada()  # Aplicaciones instaladas
 
-    def encender(self):
+    def encender(self,central):
         """
         Enciende el teléfono y activa la red móvil.
         """
@@ -34,10 +34,12 @@ class Telefono:
             self.encendido = True
             self.red_movil_activada = True  # Activar red móvil al encender
             print(f"{self.nombre} está encendido.")
+            central.registrar_dispositivo(self)
         else:
             print(f"{self.nombre} ya está encendido.")
+            
 
-    def apagar(self):
+    def apagar(self,central):
         """
         Apaga el teléfono y desactiva todas las conexiones.
         """
@@ -46,6 +48,7 @@ class Telefono:
             self.red_movil_activada = False
             self.datos_mobiles_activados = False
             print(f"{self.nombre} está apagado.")
+            central.baja_dispositivo(self)
         else:
             print(f"{self.nombre} ya está apagado.")
 

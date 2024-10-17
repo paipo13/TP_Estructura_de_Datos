@@ -15,17 +15,23 @@ class Central:
     def __init__(self):
         self.dispositivos_registrados = set()  # Usamos un set para almacenar los dispositivos registrados
 
-    def registrar_dispositivo(self, Telefono):
+    def registrar_dispositivo(self, telefono):
         """
         Registra un dispositivo en la central.
         """
-        self.dispositivos_registrados.add(Telefono)
+        self.dispositivos_registrados.add(telefono)
+        
+    def baja_dispositivo(self, telefono):
+        """
+        Desregistra un dispositivo en la central.
+        """
+        self.dispositivos_registrados.discard(telefono)
 
-    def verificar_disponibilidad(self, Telefono):
+    def verificar_disponibilidad(self, telefono):
         """
         Verifica si un teléfono está registrado y disponible para recibir llamadas o mensajes.
         """
-        if Telefono.numero_telefono in self.dispositivos_registrados and Telefono.encendido:
+        if telefono in self.dispositivos_registrados:
             return True
         else:
             return False
@@ -54,7 +60,7 @@ class Central:
             return
 
         receptor = self.buscar_dispositivo_por_numero_telefono(numero_destino)
-        if receptor is None or not self.verificar_disponibilidad(receptor):
+        if receptor is None:
             print(f"El teléfono {numero_destino} no está disponible para recibir llamadas.")
             return
 
