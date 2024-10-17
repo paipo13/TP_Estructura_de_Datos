@@ -36,19 +36,31 @@ class Central:
         else:
             return False
 
-    def registrar_comunicacion(self, tipo, emisor, receptor, detalles):
+    def registrar_llamada(self, tipo, emisor, receptor, duracion):
         """
         Registra una comunicación (llamada o SMS) en un archivo CSV.
         """
-        if not os.path.exists('comunicaciones.csv'):
-            with open('comunicaciones.csv', mode='w', newline='') as archivo_csv:
+        if not os.path.exists('llamadas.csv'):
+            with open('llamadas.csv', mode='w', newline='') as archivo_csv:
                 pass  # Create the file but don't write anything to it
-        with open('comunicaciones.csv', mode='a', newline='') as archivo_csv:
+        with open('llamadas.csv', mode='a', newline='') as archivo_csv:
             escritor_csv = csv.writer(archivo_csv)
             fecha_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            escritor_csv.writerow([fecha_hora, tipo, emisor, receptor, detalles])
+            escritor_csv.writerow([fecha_hora, tipo, emisor, receptor, duracion])
+            
+    def registrar_mensaje(self, tipo, emisor, receptor, mensaje):
+        """
+        Registra una comunicación (llamada o SMS) en un archivo CSV.
+        """
+        if not os.path.exists('mensajes.csv'):
+            with open('mensajes.csv', mode='w', newline='') as archivo_csv:
+                pass  # Create the file but don't write anything to it
+        with open('mensajes.csv', mode='a', newline='') as archivo_csv:
+            escritor_csv = csv.writer(archivo_csv)
+            fecha_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            escritor_csv.writerow([fecha_hora, tipo, emisor, receptor, mensaje])
 
-        print(f"Registro guardado: {tipo} de {emisor} a {receptor} - {detalles}")
+        print(f"Registro guardado: {tipo} de {emisor} a {receptor} - {mensaje}")
 
     def establecer_llamada(self, emisor, numero_destino):
         """
@@ -65,7 +77,7 @@ class Central:
             return
 
         print(f"Llamada establecida de {emisor.numero_telefono} a {numero_destino}.")
-        self.registrar_comunicacion("Llamada", emisor.numero_telefono, numero_destino, "Conectada")
+        self.registrar_llamada("Llamada", emisor.numero_telefono, numero_destino, "Conectada")
 
     def enviar_mensaje(self, emisor, numero_destino, mensaje):
         """
@@ -77,7 +89,7 @@ class Central:
             return
 
         print(f"Mensaje enviado de {emisor.numero_telefono} a {numero_destino}: {mensaje.contenido}")
-        self.registrar_comunicacion("Mensaje", emisor.numero_telefono, numero_destino, mensaje.contenido)
+        self.registrar_mensaje("Mensaje", emisor.numero_telefono, numero_destino, mensaje.contenido)
     
 
     def buscar_dispositivo_por_numero_telefono(self, numero_destino):
@@ -93,16 +105,27 @@ class Central:
         """
         Genera un reporte de las comunicaciones registradas en el archivo CSV.
         """
-        comunicaciones = []
+        lista_llamadas = []
+        lista_mensajes = []
         try:
-            with open('comunicaciones.csv', mode='r') as archivo_csv:
+            with open('llamadas.csv', mode='r') as archivo_csv:
                 lector_csv = csv.reader(archivo_csv)
                 for fila in lector_csv:
-                    comunicaciones.append(fila)
+                    lista_llamadas.append(fila)
+            with open('mensajes.csv', mode='r') as archivo_csv:
+                lector_csv = csv.reader(archivo_csv)
+                for fila in lector_csv:
+                    lista_mensajes.append(fila)
 
             print("\n--- Reporte de Comunicaciones ---")
-            for comunicacion in comunicaciones:
-                fecha_hora, tipo, emisor, receptor, detalles = comunicacion
-                print(f"{fecha_hora} | {tipo} de {emisor} a {receptor} - {detalles}")
+            print("\nLlamadas")
+            for llamada in lista_llamadas:
+                fecha_hora, tipo, emisor, receptor, detalle = llamada
+                print(f"{fecha_hora} | {tipo} de {emisor} a {receptor} - {detalle}")
+            print("\nMensajes")
+            for msj in lista_mensajes:
+                fecha_hora, tipo, emisor, receptor, detalle = msj
+                print(f"{fecha_hora} | {tipo} de {emisor} a {receptor} - {detalle}")
         except FileNotFoundError:
             print("No hay camunicaciones registradas")
+            
