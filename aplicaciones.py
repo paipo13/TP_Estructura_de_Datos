@@ -1,7 +1,7 @@
 #Las aplicaciones permiten realizar llamadas, enviar SMS, gestionar contactos, etc. 
 #Definimos una clase base de aplicaciones y algunas subclases para el manejo de llamadas y mensajes.
 
-
+from telefono import *
 
 class Aplicacion:
     """
@@ -35,3 +35,29 @@ class AppSMS(Aplicacion):
 
     def ejecutar(self):
         print("Aplicación de Mensajes SMS abierta. Puede enviar y recibir mensajes.")
+
+from collections import deque
+class AppMail:
+    def __init__(self, owner:Telefono):
+        self.owner = owner  # El teléfono al que pertenece la app
+        self.bandeja_de_salida = []
+        self.bandeja_de_entrada_noleidos = deque()  #creo pia
+        self.bandeja_de_entrada_leidos = []
+
+    def enviar_mail(self, destinatario : Telefono, mensaje):
+        if destinatario.tiene_app():
+            mail = f"De: {self.owner.numero_telefono}, Para: {destinatario.numero_telefono}, Mensaje: {mensaje}"
+            destinatario.recibir_mail(mail)
+            self.bandeja_de_salida.append(mail)
+            print(f"Correo enviado a {destinatario.numero_telefono}")
+        else:
+            print(f"No se puede enviar el correo. {destinatario.numero_telefono} no tiene la app de mail.")
+
+    def recibir_mail(self, mail):
+        self.bandeja_de_entrada_noleidos.appendleft([mail,datetime.now().strftime("%Y-%m-%d %H:%M:%S")])        
+    def ver_mis_mails (self):
+        pass
+    
+    
+        
+        
