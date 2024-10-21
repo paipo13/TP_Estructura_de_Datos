@@ -54,10 +54,20 @@ class AppMail:
             print(f"No se puede enviar el correo. {destinatario.numero_telefono} no tiene la app de mail.")
 
     def recibir_mail(self, mail):
-        self.bandeja_de_entrada_noleidos.appendleft([mail,datetime.now().strftime("%Y-%m-%d %H:%M:%S")])        
+        self.bandeja_de_entrada_noleidos.appendleft([mail,datetime.now().strftime("%Y-%m-%d %H:%M:%S")]) 
+               
     def ver_mis_mails (self):
-        pass
-    
+        copia = self.bandeja_de_entrada_leidos
+        print('Correos NO leidos:')
+        for cosa in self.bandeja_de_entrada_noleidos:
+            print(cosa)
+            self.bandeja_de_entrada_leidos.appendleft(cosa)
+        print('Correos leidos:')
+        for elemento in copia:
+            print(elemento)
+        
+        self.bandeja_de_entrada_noleidos = deque()        
+        
     
         
         
