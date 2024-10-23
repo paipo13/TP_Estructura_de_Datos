@@ -2,7 +2,7 @@
 #Definimos una clase base de aplicaciones y algunas subclases para el manejo de llamadas y mensajes.
 
 from telefono import *
-
+from datetime import datetime
 class Aplicacion:
     """
     Clase base para todas las aplicaciones.
