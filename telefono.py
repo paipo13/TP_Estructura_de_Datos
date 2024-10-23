@@ -162,4 +162,5 @@ class Telefono:
             print(f"Aplicación {aplicacion.nombre} instalada con éxito.")
             
     def tiene_app(self, aplicacion): #aplicacion seria el objeto (ej AppMail)
-        return any(isinstance(app, aplicacion) for app in self.apps) ## TRUE si el telefono tiene esa app.(ej mail)
+        self.aplicaciones.agregar('AppMail')
+        return self.aplicaciones.buscar_devuelve_True_or_False(aplicacion) ## TRUE si el telefono tiene esa app.(ej mail)

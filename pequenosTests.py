@@ -17,3 +17,14 @@ print(personal.dispositivos_registrados)
 telefono1.realizar_llamada("987654321",personal)
 personal.generar_reporte_comunicaciones()
 
+mail1 = AppMail(telefono1)
+mail2 = AppMail(telefono2)
+
+mail1.enviar_mail(telefono2,mail2, '¿hola como andas1?')
+mail1.enviar_mail(telefono2, mail2, '¿hola como andas2?')
+mail1.enviar_mail(telefono2, mail2, '¿hola como andas3?')
+mail1.enviar_mail(telefono2, mail2, '¿hola como andas4?')
+
+mail2.ver_mis_mails()
+mail2.ver_mis_mails()
+
