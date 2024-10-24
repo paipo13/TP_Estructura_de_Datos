@@ -20,11 +20,11 @@ if __name__ == "__main__":
     central.registrar_dispositivo(telefono2)
 
     # Pruebas de encendido y apagado
-    telefono1.encender()
+    telefono1.encender(central)
     telefono1.bloquear()
     telefono1.desbloquear()
     telefono1.activar_red_movil()
-    telefono2.encender()
+    telefono2.encender(central)
     telefono2.activar_red_movil()
     # Activar red móvil y realizar llamada
     telefono1.realizar_llamada(telefono2, central)
@@ -33,7 +33,7 @@ if __name__ == "__main__":
     telefono1.enviar_sms(telefono2, "Hola, ¿cómo estás?", central)
 
     # Apagar el teléfono y tratar de enviar otro mensaje
-    telefono1.apagar()
+    telefono1.apagar(central)
     telefono1.enviar_sms(telefono2, "Esto no debería enviarse", central)
 
     # Crear App Store y mostrar aplicaciones disponibles
@@ -44,7 +44,7 @@ if __name__ == "__main__":
     app_store.descargar_aplicacion(telefono1, "Correo")
 
     # Pruebas de encendido, red móvil, y realizar una llamada
-    telefono1.encender()
+    telefono1.encender(central)
     telefono1.activar_red_movil()
     telefono1.realizar_llamada("987654321", central)
 
