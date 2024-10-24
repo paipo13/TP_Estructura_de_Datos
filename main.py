@@ -5,7 +5,6 @@ from listas_enlazadas import *
 from contactos import *
 from listas_enlazadas import * 
 from central_comunicacion import *
-from appstore import *
 
 if __name__ == "__main__":
     # Crear dispositivos

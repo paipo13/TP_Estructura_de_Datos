@@ -7,6 +7,7 @@ from listas_enlazadas import *
 from contactos import *
 from central_comunicacion import *
 from clase_apps import *
+from clase_configuracion import *
 class Telefono:
     def __init__(self, id, nombre, modelo, sistema_operativo, version, ram, almacenamiento, numero_telefono):
         """Inicializa un teléfono con los atributos básicos."""
@@ -20,10 +21,10 @@ class Telefono:
         self.numero_telefono = numero_telefono
         self.encendido = False
         self.bloqueado = True
-        self.red_movil_activada = False
-        self.datos_mobiles_activados = False
+        self.configuracion= Configuracion()
         self.contactos = ListaEnlazada()  # Usamos una lista enlazada para gestionar los contactos
         self.appstore=Appstore()
+        self.mensajes=deque()
 
     def encender(self,central):
         """Enciende el teléfono y activa la red móvil."""
@@ -90,47 +91,29 @@ class Telefono:
         if not self.red_movil_activada:
             print("La red móvil no está activada. Active la red móvil para enviar mensajes.")
             return
-
         # mensaje = Mensaje(self.numero_telefono, numero_destino, contenido)
         # Central.enviar_mensaje(self, numero_destino, mensaje)
-        central.enviar_mensaje( self.numero_telefono, numero_destino, contenido)
-
+        central.enviar_mensaje( self, numero_destino, contenido)
+    
+    def recibir_sms(self, mensaje):
+        self.mensajes.appendleft(mensaje)
 #(self: Central, emisor: Any, numero_destino: Any, mensaje: Any)
 
     # Validaciones para situaciones que pueden provocar errores, 
     #como intentar enviar mensajes con el teléfono apagado o sin red móvil.
-
-    def activar_red_movil(self):
-        """Activa la red móvil si el teléfono está encendido."""
-        if not self.encendido:
-            print("El teléfono está apagado. No puede activar la red móvil.")
-            return
-
-        self.red_movil_activada = True
-        print(f"Red móvil activada en {self.nombre}.")
-
-    def desactivar_red_movil(self):
-        """Desactiva la red móvil."""
-        self.red_movil_activada = False
-        print(f"Red móvil desactivada en {self.nombre}.")
-
-    def activar_datos_mobiles(self):
-        """Activa los datos móviles si la red móvil está activada."""
-        if not self.red_movil_activada:
-            print("La red móvil no está activada. No puede activar los datos móviles.")
-            return
-
-        self.datos_mobiles_activados = True
-        print("Datos móviles activados.")
-
-    def desactivar_datos_mobiles(self):
-        """Desactiva los datos móviles."""
-        self.datos_mobiles_activados = False
-        print("Datos móviles desactivados.")
 
     # Instalar aplicaciones desde el AppStore
     def descargar_app(self,name):
         self.appstore.descargar_app(name)
     def eliminar_app(self,name):
         self.appstore.eliminar_app(name)
+    
+    def activar_modo_avion(self):
+        self.configuracion.activar_modo_avion()
+    def desactivar_modo_avion(self):
+        self.configuracion.desactivar_modo_avion()
+    def activar_datos(self):
+        self.configuracion.activar_datos()
+    def desactivar_datos(self):
+        self.configuracion.desactivar_datos()
     

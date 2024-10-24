@@ -109,8 +109,8 @@ class Central:
 
         print(f"Mensaje enviado de {emisor.numero_telefono} a {numero_destino}: {mensaje.contenido}")
         self.registrar_mensaje("Mensaje", emisor.numero_telefono, numero_destino, mensaje.contenido)
-    
-
+        receptor.recibir_sms([mensaje,emisor.numero_telefono,datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+        
     def buscar_dispositivo_por_numero_telefono(self, numero_destino):
         """
         Busca un dispositivo en la central por su número telefónico.

@@ -22,11 +22,15 @@ class Appstore:
         self.name=name
         self.apps=set()
         self.apps_descargadas=set() 
+        titulo=True
         with open(archivo_data, mode='r', encoding='utf-8') as archivo_csv:
             lector_csv = csv.reader(archivo_csv)
             for fila in lector_csv:
-                object=App(fila[0],fila[1],fila[2],fila[3],fila[4],fila[5],fila[6],fila[7],fila[8],fila[9],fila[10],fila[11],fila[12])
-                self.apps.add(object)
+                if titulo:
+                    titulo=False
+                else:
+                    object=App(fila[0],fila[1],fila[2],fila[3],fila[4],fila[5],fila[6],fila[7],fila[8],fila[9],fila[10],fila[11],fila[12])
+                    self.apps.add(object)
     def descargar_app(self, name):
         app=None
         for object in self.apps:
