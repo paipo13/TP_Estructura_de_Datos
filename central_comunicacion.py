@@ -5,7 +5,7 @@ from telefono import *
 from contactos import *
 from listas_enlazadas import *
 import csv
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 
 class Central:
@@ -36,6 +36,25 @@ class Central:
         else:
             return False
 
+    def validar_estado_de_llamada(self, emisor, receptor,duracion,tiempo_llamada):
+        hola = 1
+        with open('llamadas.csv', mode='r') as archivo_csv:
+            lector_csv = csv.reader(archivo_csv)
+            for fila in lector_csv:
+                pass
+        return False
+    def Validar_estado_de_llamadas(self, emisor, receptor, duracion, tiempo_llamada):
+    
+    #"Verifica si el estado de la llamada es True o False. Si el telefono al que estoy llamando ya tiene una llamada conectada, devuelve False."
+        try:
+            with open('llamadas.csv', mode='r') as archivo_csv:
+                lector_csv = csv.reader(archivo_csv)
+                for fila in reversed(lector_csv):  # Leer los registros en orden inverso para obtener la última llamada
+                    if fila[3] == "Conectada" and fila[1] == receptor.numero_telefono:
+                        if (datetime.strptime(fila[2], "%Y-%m-%d %H:%M:%S") + timedelta(seconds=int(fila[4]))).strftime("%Y-%m-%d %H:%M:%S") <= datetime.now().strftime("%Y-%m-%d %H:%M:%S"):
+                            return False
+        finally:
+            return True
     def registrar_llamada(self, tipo, emisor, receptor, duracion):
         """
         Registra una comunicación (llamada o SMS) en un archivo CSV.
@@ -45,8 +64,8 @@ class Central:
                 pass  # Create the file but don't write anything to it
         with open('llamadas.csv', mode='a', newline='') as archivo_csv:
             escritor_csv = csv.writer(archivo_csv)
-            fecha_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            escritor_csv.writerow([fecha_hora, tipo, emisor, receptor, duracion])
+            tiempo = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            escritor_csv.writerow([emisor,receptor,duracion,tiempo,estado])
             
     def registrar_mensaje(self, tipo, emisor, receptor, mensaje):
         """
