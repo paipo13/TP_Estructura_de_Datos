@@ -6,6 +6,7 @@ from aplicaciones import *
 from listas_enlazadas import *
 from contactos import *
 from central_comunicacion import *
+from clase_apps import *
 class Telefono:
     def __init__(self, id, nombre, modelo, sistema_operativo, version, ram, almacenamiento, numero_telefono):
         """Inicializa un teléfono con los atributos básicos."""
@@ -22,7 +23,7 @@ class Telefono:
         self.red_movil_activada = False
         self.datos_mobiles_activados = False
         self.contactos = ListaEnlazada()  # Usamos una lista enlazada para gestionar los contactos
-        self.aplicaciones = ListaEnlazada()  # Aplicaciones instaladas
+        self.appstore=Appstore()
 
     def encender(self,central):
         """Enciende el teléfono y activa la red móvil."""
@@ -64,24 +65,6 @@ class Telefono:
             print(f"{self.nombre} está desbloqueado.")
         else:
             print(f"{self.nombre} ya está desbloqueado.")
-
-    def abrir_aplicacion(self, nombre_aplicacion):
-        """Abre una aplicación instalada si el teléfono está encendido y desbloqueado."""
-        if not self.encendido:
-            print("El teléfono está apagado. No se puede abrir la aplicación.")
-            return
-
-        if self.bloqueado:
-            print("El teléfono está bloqueado. Desbloquéelo para abrir la aplicación.")
-            return
-
-        for aplicacion in self.aplicaciones:
-            if aplicacion.nombre == nombre_aplicacion:
-                print(f"Abriendo {nombre_aplicacion}...")
-                aplicacion.ejecutar()
-                return
-
-        print(f"La aplicación {nombre_aplicacion} no está instalada en el teléfono.")
 
     def realizar_llamada(self, numero_destino, Central):
         """Intenta realizar una llamada a otro número a través de la Central."""
@@ -146,21 +129,8 @@ class Telefono:
         print("Datos móviles desactivados.")
 
     # Instalar aplicaciones desde el AppStore
-
-    def instalar_aplicacion(self, aplicacion):
-        """Instala una aplicación en el teléfono si no está ya instalada."""
-        # if aplicacion not in self.aplicaciones:
-        #     self.aplicaciones.append(aplicacion)
-        #     print(f"Aplicación {aplicacion.nombre} instalada con éxito.")
-        # else:
-        #     print(f"La aplicación {aplicacion.nombre} ya está instalada.")
-
-        if self.aplicaciones.buscar_devuelve_True_or_False(aplicacion)==True:
-            print(f"La aplicación {aplicacion.nombre} ya está instalada.")
-        else:
-            self.aplicaciones.agregar(aplicacion)
-            print(f"Aplicación {aplicacion.nombre} instalada con éxito.")
-            
-    def tiene_app(self, aplicacion): #aplicacion seria el objeto (ej AppMail)
-        self.aplicaciones.agregar('AppMail')
-        return self.aplicaciones.buscar_devuelve_True_or_False(aplicacion) ## TRUE si el telefono tiene esa app.(ej mail)
+    def descargar_app(self,name):
+        self.appstore.descargar_app(name)
+    def eliminar_app(self,name):
+        self.appstore.eliminar_app(name)
+    
