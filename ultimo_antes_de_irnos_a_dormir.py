@@ -1,23 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import os
 from datetime import datetime, timedelta
 import csv
@@ -145,11 +125,11 @@ class Telefono:
     
     def agregar_contacto(self, nombre, numero):
         if self.validar_numero_telefono(numero):
-            self.contactos.add((nombre, numero))
+            self.contactos.add((nombre, numero)) #Al estar trabajando con cantactos = set(), si el contacto ya existe no saltara ningun error al tratar de agregar un contacto ya existente ni tampoco se agregara dos veces. Lo que pasara es nada. Solo tendremos un vez dicho contacto en el set().
         else:
             raise ValueError("Número de teléfono inválido")
     
-    def actualizar_contacto(self, nombre, nuevo_numero):
+    def actualizar_contacto(self, nombre, nuevo_numero): #Metodo para actualizar un contacto, es decir actualizar el numero de un usuario.
         for contacto in self.contactos:
             if contacto[0] == nombre:
                 self.contactos.remove(contacto)
@@ -304,13 +284,13 @@ class Central:
         return False
     
     def determinar_estado_llamada(self, destino, tiempo_actual):
-        ultima_llamada = self.obtener_ultima_llamada(destino)
+        ultima_llamada = self.obtener_ultima_llamada(destino) #Obs.estamos trabajando con tumplas donde ultima_llamada = (tiempo,duracion)
         if ultima_llamada:
-            tiempo_ultima_llamada, duracion_ultima_llamada = ultima_llamada
+            tiempo_ultima_llamada, duracion_ultima_llamada = ultima_llamada #Obs. desempaquetado de la tumpla donde asigno a tiempo_ultima_llamda el valor tiempo que tiene el tiempo en el que se realizo la ultima llamada del teleofno de destino y a la variable duracion_ultima_llamdad se le asigna el valor duracion que es la duracion (en seg) de la ultima llamda que realizo el numero al que estamos llamando, num de destino.
             tiempo_fin_ultima_llamada = tiempo_ultima_llamada + timedelta(seconds=duracion_ultima_llamada)
             if tiempo_fin_ultima_llamada >= tiempo_actual:
                 return "ocupado"
-        return "conectado"
+        return "conectado" ###estamos en llamassss ;)
     
     def obtener_ultima_llamada(self, numero):
         ruta_archivo = os.path.join('datos', 'llamadas.csv')
@@ -320,7 +300,7 @@ class Central:
             reader = csv.reader(file)
             next(reader)  # Saltar la fila de encabezados
             llamadas = list(reader)
-            for llamada in reversed(llamadas):
+            for llamada in reversed(llamadas): #Da vuelta el ordenamiento
                 if llamada[1] == str(numero):  # Si el número es el destino de la llamada
                     tiempo = datetime.strptime(llamada[3], '%Y-%m-%d %H:%M:%S.%f')
                     duracion = int(llamada[2])
