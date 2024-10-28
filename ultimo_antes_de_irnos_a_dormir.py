@@ -1,8 +1,29 @@
 import os
 from datetime import datetime, timedelta
 import csv
+import matplotlib.pyplot as plt
 
 # Estructuras de datos
+
+def grafico_barras(data):
+    # data debería ser un diccionario con sistemas operativos como clave y cantidad como valor
+    sistemas = list(data.keys())
+    cantidades = list(data.values())
+
+    plt.bar(sistemas, cantidades, color='skyblue')
+    plt.title('Cantidad de Teléfonos por Sistema Operativo')
+    plt.xlabel('Sistema Operativo')
+    plt.ylabel('Cantidad')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+
+def agregar_datos_diccionario(diccionario, clave):
+    if clave in diccionario:
+        diccionario[clave] += 1
+    else:
+        diccionario[clave] = 1
+        
 class Nodo:
     def __init__(self, dato=None, siguiente=None):
         self.dato = dato
@@ -343,6 +364,10 @@ def main():
     telefono3 = Telefono(3, "Google", "Pixel 5", "Android", "12", 8, 128, 5555555555)
     telefono4 = Telefono(4, "Xiaomi", "Mi 11", "Android", "11", 8, 256, 1112223333)
     
+    # Data para graficos de Matplotlib
+    diccionario_grafico = {}
+    for telefono in [telefono1, telefono2, telefono3, telefono4]:
+        agregar_datos_diccionario(diccionario_grafico,telefono.sistema_operativo)
     # Registrar teléfonos en la central
     for telefono in [telefono1, telefono2, telefono3, telefono4]:
         central.registrar_telefono(telefono)
@@ -479,6 +504,10 @@ def main():
     # Mostrar registros de la central
     print("Registros de la central:")
     central.mostrar_registros()
+
+    #Graficos con Matplotlib
+    print(diccionario_grafico)
+    grafico_barras(diccionario_grafico)
 
 if __name__ == "__main__":
     main()
