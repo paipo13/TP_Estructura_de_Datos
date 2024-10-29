@@ -8,6 +8,7 @@ from contactos import *
 from central_comunicacion import *
 from clase_apps import *
 from clase_configuracion import *
+from collections import deque
 class Telefono:
     def __init__(self, id, nombre, modelo, sistema_operativo, version, ram, almacenamiento, numero_telefono):
         """Inicializa un teléfono con los atributos básicos."""
@@ -30,10 +31,8 @@ class Telefono:
         """Enciende el teléfono y activa la red móvil."""
         if not self.encendido:
             self.encendido = True
-            self.red_movil_activada = True  # Activar red móvil al encender
-            self.bloqueado = False
-            self.datos_mobiles_activados = True
-            print(f"{self.nombre} está encendido.")
+            self.desactivar_modo_avion
+            print(f"{self.nombre} ha sido encendido.")
             central.registrar_dispositivo(self)
         else:
             print(f"{self.nombre} ya está encendido.")
@@ -43,10 +42,9 @@ class Telefono:
         """Apaga el teléfono y desactiva todas las conexiones."""
         if self.encendido:
             self.encendido = False
-            self.red_movil_activada = False
-            self.datos_mobiles_activados = False
+            self.activar_modo_avion
             self.bloqueado = True
-            print(f"{self.nombre} está apagado.")
+            print(f"{self.nombre} ha sido apagado.")
             central.baja_dispositivo(self)
         else:
             print(f"{self.nombre} ya está apagado.")
@@ -55,7 +53,7 @@ class Telefono:
         """Bloquea el teléfono."""
         if not self.bloqueado:
             self.bloqueado = True
-            print(f"{self.nombre} está bloqueado.")
+            print(f"{self.nombre} ha sido bloqueado.")
         else:
             print(f"{self.nombre} ya está bloqueado.")
 
@@ -63,7 +61,7 @@ class Telefono:
         """Desbloquea el teléfono."""
         if self.bloqueado:
             self.bloqueado = False
-            print(f"{self.nombre} está desbloqueado.")
+            print(f"{self.nombre} ha sido desbloqueado.")
         else:
             print(f"{self.nombre} ya está desbloqueado.")
 
@@ -101,19 +99,31 @@ class Telefono:
 
     # Validaciones para situaciones que pueden provocar errores, 
     #como intentar enviar mensajes con el teléfono apagado o sin red móvil.
-
+    def encendido_y_desbloqueado(self):   # devuelve True si el teléfono está encendido y desbloqueado
+        if not self.encendido:
+            print("El teléfono está apagado")
+        if self.bloqueado:
+            print("El teléfono está bloqueado")
+        return self.encendido and not self.bloqueado
     # Instalar aplicaciones desde el AppStore
     def descargar_app(self,name):
-        self.appstore.descargar_app(name)
+        if self.configuracion.datos and self.encendido_y_desbloqueado():
+            self.appstore.descargar_app(name)
+        else:
+            print('No tiene datos para descargar aplicaciones')
     def eliminar_app(self,name):
-        self.appstore.eliminar_app(name)
-    
+        if self.encendido_y_desbloqueado():
+            self.appstore.eliminar_app(name)
     def activar_modo_avion(self):
-        self.configuracion.activar_modo_avion()
+        if self.encendido_y_desbloqueado():
+            self.configuracion.activar_modo_avion()
     def desactivar_modo_avion(self):
-        self.configuracion.desactivar_modo_avion()
+        if self.encendido_y_desbloqueado():
+            self.configuracion.desactivar_modo_avion()
     def activar_datos(self):
-        self.configuracion.activar_datos()
+        if self.encendido_y_desbloqueado():
+            self.configuracion.activar_datos()
     def desactivar_datos(self):
-        self.configuracion.desactivar_datos()
+        if self.encendido_y_desbloqueado():
+            self.configuracion.desactivar_datos()
     

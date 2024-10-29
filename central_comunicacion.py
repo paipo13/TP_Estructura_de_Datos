@@ -59,12 +59,16 @@ class Central:
         """
         Registra una comunicación (llamada o SMS) en un archivo CSV.
         """
+        estado = 'ocupado'
+        if self.validar_estado_de_llamadas(emisor, receptor, duracion, datetime.now()):
+            estado = 'conectada'
         if not os.path.exists('llamadas.csv'):
             with open('llamadas.csv', mode='w', newline='') as archivo_csv:
                 pass  # Create the file but don't write anything to it
         with open('llamadas.csv', mode='a', newline='') as archivo_csv:
             escritor_csv = csv.writer(archivo_csv)
             tiempo = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            
             escritor_csv.writerow([emisor,receptor,duracion,tiempo,estado])
             
     def registrar_mensaje(self, tipo, emisor, receptor, mensaje):
