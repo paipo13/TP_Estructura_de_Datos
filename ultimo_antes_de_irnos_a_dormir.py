@@ -4,7 +4,99 @@ import csv
 import matplotlib.pyplot as plt
 
 # Estructuras de datos
+#Aplicaciones
+import csv
+class App:
+    def __init__(self,nombre_app,Category,Rating,Reviews,Size,Installs,Type,Price,Content_Rating,Genres,Last_Updated,Current_Ver,Android_Ver):
+        self.nombre_app= nombre_app
+        self.category = Category
+        self.rating = Rating
+        self.reviews = Reviews
+        self.size = Size
+        self.installs = Installs
+        self.type = Type
+        self.price = Price
+        self.content_rating = Content_Rating
+        self.genres = Genres
+        self.last_updated = Last_Updated
+        self.current_ver = Current_Ver
+        self.android_ver = Android_Ver
+    def __str__(self):
+        return self.nombre_app
 
+class Appstore:
+    def __init__(self, nombre_app='Appstore', archivo_data='Play Store Data.csv'):
+        self.nombre_app=nombre_app
+        self.apps=set()
+        self.apps_descargadas=set() 
+        titulo=True
+        with open(archivo_data, mode='r', encoding='utf-8') as archivo_csv:
+            lector_csv = csv.reader(archivo_csv)
+            for fila in lector_csv:
+                if titulo:
+                    titulo=False
+                else:
+                    object=App(fila[0],fila[1],fila[2],fila[3],fila[4],fila[5],fila[6],fila[7],fila[8],fila[9],fila[10],fila[11],fila[12])
+                    self.apps.add(object)
+    def descargar_app(self, nombre_app):
+        app=None
+        for object in self.apps:
+            if object.nombre_app==nombre_app:
+                app=object
+        if app is None:
+                print("No existe la app deseada.")      
+        elif app not in self.apps_descargadas:
+            self.apps_descargadas.add(app)
+            print(f"Descargada la app {app.nombre_app}")
+        else:
+            print(f"La app {app.nombre_app} ya se encuentra descargada.")
+            
+    def eliminar_app(self, nombre_app):
+        app=None
+        for object in self.apps_descargadas:
+            if object.nombre_app==nombre_app:
+                app=object
+        if app is None:
+            print(f"La app {nombre_app} a eliminar no esta descargada.")
+        else:
+            self.apps_descargadas.remove(app)
+            print(f"Eliminada la app {app.nombre_app}")
+#Aplicacion Configuracion
+class Configuracion:
+    def __init__(self):
+        self.modo_avion = False
+        self.datos_activos = False
+    
+    def activar_modo_avion(self):
+        if self.modo_avion==False:
+            self.modo_avion = True
+            print("Modo avion activado")
+            if self.datos_activos==True:
+                self.datos_activos = False
+                print("Datos desactivados")
+        else:
+            print("Ya se encuentra en modo avion")
+    def desactivar_modo_avion(self):
+        if self.modo_avion==True:
+            self.modo_avion = False
+            print("Modo avion desactivado")
+        else:
+            print("No se encuentra en modo avion")
+            
+    def activar_datos(self):
+        if self.modo_avion==True:
+            print("No puedes activar los datos en modo avion")
+        elif self.datos_activos==False:
+            self.datos_activos = True
+            print("Datos activados")   
+        else:
+            print("Ya se encuentran los datos activos")
+    def desactivar_datos(self):
+        if self.datos_activos==True:
+            self.datos_activos = False
+            print("Datos desactivados")
+        else:
+            print("Los datos ya estan desactivados")
 def grafico_barras(data):
     # data debería ser un diccionario con sistemas operativos como clave y cantidad como valor
     sistemas = list(data.keys())
@@ -23,11 +115,24 @@ def agregar_datos_diccionario(diccionario, clave):
         diccionario[clave] += 1
     else:
         diccionario[clave] = 1
-        
+
 class Nodo:
     def __init__(self, dato=None, siguiente=None):
         self.dato = dato
         self.siguiente = siguiente
+    
+    def agregarnodos(raiz,nodo):
+        if raiz.valor[1]<nodo.valor[1]:
+            if raiz.derecho==None:
+                raiz.derecho=nodo
+            else:
+                raiz.derecho.agregarnodos(nodo)
+        elif raiz.valor[1]>nodo.valor[1]:
+            if raiz.izquierdo==None:
+                raiz.izquierdo=nodo
+            else:
+                raiz.izquierdo.agregarnodos(nodo)
+
 
 class ListaEnlazada:
     def __init__(self):
@@ -83,8 +188,8 @@ class Telefono:
         self.encendido = False
         self.bloqueado = True
         self.red_movil_activa = False
-        self.datos_activos = False
-        self.modo_avion = False
+        # self.datos_activos = False
+        # self.modo_avion = False
         
         # Inicializar componentes internos
         self.contactos = set()
@@ -92,8 +197,16 @@ class Telefono:
         self.historial_sms_enviados = Pila()
         self.emails = ListaEnlazada()
         self.historial_llamadas = ListaEnlazada()
-        self.apps_instaladas = set(["Contactos", "Mensajeria", "Email", "Telefono", "AppStore", "Configuracion"])
-    
+        # self.apps_instaladas = set(["Contactos", "Mensajeria", "Email", "Telefono", "AppStore", "Configuracion"])
+        self.appstore=Appstore()
+        self.configuracion = Configuracion()
+
+    def encendido_y_desbloqueado(self):   # devuelve True si el teléfono está encendido y desbloqueado
+        if not self.encendido:
+            print("El teléfono está apagado")
+        if self.bloqueado:
+            print("El teléfono está bloqueado")
+        return self.encendido and not self.bloqueado
     def encender(self):
         self.encendido = True
         self.activar_red_movil()
@@ -110,39 +223,50 @@ class Telefono:
         self.bloqueado = False
     
     def activar_red_movil(self):
-        if self.encendido and not self.modo_avion:
+        if self.encendido and not self.configuracion.modo_avion:
             self.red_movil_activa = True
     
     def desactivar_red_movil(self):
         self.red_movil_activa = False
     
     def activar_datos(self):
-        if self.encendido and not self.modo_avion:
-            self.datos_activos = True
+        # if self.encendido and not self.modo_avion:
+        #     self.datos_activos = True
+        #     self.red_movil_activa = True  # Aseguramos que la red móvil esté activa
+        if self.encendido_y_desbloqueado():
+            self.configuracion.activar_datos()
             self.red_movil_activa = True  # Aseguramos que la red móvil esté activa
         else:
             raise ValueError("No se pueden activar los datos. El teléfono debe estar encendido y no en modo avión.")
     
     def desactivar_datos(self):
-        self.datos_activos = False
+        # self.datos_activos = False
+        if self.encendido_y_desbloqueado():
+            self.configuracion.desactivar_datos()
     
     def activar_modo_avion(self):
-        self.modo_avion = True
-        self.red_movil_activa = False
-        self.datos_activos = False
+        # self.modo_avion = True
+        # self.red_movil_activa = False
+        # self.datos_activos = False
+        if self.encendido_y_desbloqueado():
+            self.configuracion.activar_modo_avion()
+            self.red_movil_activa = False
     
     def desactivar_modo_avion(self):
-        self.modo_avion = False
-        self.activar_red_movil()
+        # self.modo_avion = False
+        # self.activar_red_movil()
+        if self.encendido_y_desbloqueado():
+            self.configuracion.desactivar_modo_avion()
+            self.activar_red_movil()
     
-    def abrir_aplicacion(self, nombre_app):
-        if self.validar_encendido() and self.validar_desbloqueado():
-            if nombre_app in self.apps_instaladas:
-                return f"Abriendo {nombre_app}"
-            else:
-                raise ValueError("Aplicación no encontrada")
-        else:
-            raise ValueError("El teléfono debe estar encendido y desbloqueado para abrir aplicaciones")
+    # def abrir_aplicacion(self, nombre_app):
+    #     if self.validar_encendido() and self.validar_desbloqueado():
+    #         if nombre_app in self.apps_instaladas:
+    #             return f"Abriendo {nombre_app}"
+    #         else:
+    #             raise ValueError("Aplicación no encontrada")
+    #     else:
+    #         raise ValueError("El teléfono debe estar encendido y desbloqueado para abrir aplicaciones")
     
     def agregar_contacto(self, nombre, numero):
         if self.validar_numero_telefono(numero):
@@ -183,14 +307,18 @@ class Telefono:
         self.historial_llamadas.insertar((numero, datetime.now(), "entrante"))
     
     def descargar_app(self, nombre_app):
-        if self.validar_encendido() and self.validar_desbloqueado() and self.datos_activos:
-            self.apps_instaladas.add(nombre_app)
+        # if self.validar_encendido() and self.validar_desbloqueado() and self.configuracion.datos_activos:
+        #     self.apps_instaladas.add(nombre_app)
+        if self.configuracion.datos and self.encendido_y_desbloqueado():
+            self.appstore.descargar_app(nombre_app)
+
         else:
             raise ValueError("El teléfono debe estar encendido, desbloqueado y con datos activos para descargar aplicaciones")
     
     def eliminar_app(self, nombre_app):
         if nombre_app in self.apps_instaladas:
-            self.apps_instaladas.remove(nombre_app)
+            # self.apps_instaladas.remove(nombre_app)
+            self.appstore.eliminar_app(nombre_app)
         else:
             raise ValueError("La aplicación no está instalada")
     
@@ -223,17 +351,6 @@ class Telefono:
             return sorted(emails, key=lambda x: x[3])
         else:
             raise ValueError("Orden no válido")
-
-class Configuracion:
-    def __init__(self):
-        self.nombre_telefono = ""
-        self.codigo_desbloqueo = ""
-    
-    def configurar_nombre(self, nombre):
-        self.nombre_telefono = nombre
-    
-    def configurar_codigo_desbloqueo(self, codigo):
-        self.codigo_desbloqueo = codigo
 
 class Central:
     def __init__(self):
@@ -463,21 +580,14 @@ def main():
     print()
 
     # Descargar una nueva aplicación
-    nueva_app = "Instagram"
-    for telefono in [telefono1, telefono3]:
-        try:
-            telefono.descargar_app(nueva_app)
-            print(f"{nueva_app} descargada en {telefono.nombre}")
-        except ValueError as e:
-            print(f"Error al descargar {nueva_app} en {telefono.nombre}: {e}")
-    print()
-
-    # Configurar teléfonos
-    telefono1.configuracion = Configuracion()
-    telefono1.configuracion.configurar_nombre("iPhone de Juan")
-    telefono1.configuracion.configurar_codigo_desbloqueo("1234")
-    print(f"Configuración actualizada para {telefono1.nombre}")
-    print()
+    # nueva_app = "Instagram"
+    # for telefono in [telefono1, telefono3]:
+    #     try:
+    #         telefono.descargar_app(nueva_app)
+    #         print(f"{nueva_app} descargada en {telefono.nombre}")
+    #     except ValueError as e:
+    #         print(f"Error al descargar {nueva_app} en {telefono.nombre}: {e}")
+    # print()
 
     # Simular una llamada ocupada
     print("Simulando una llamada ocupada:")
@@ -511,4 +621,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    

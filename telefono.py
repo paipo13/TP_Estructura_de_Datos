@@ -6,7 +6,7 @@ from aplicaciones import *
 from listas_enlazadas import *
 from contactos import *
 from central_comunicacion import *
-from clase_apps import *
+from clase_apps import * 
 from clase_configuracion import *
 from collections import deque
 class Telefono:
@@ -105,7 +105,7 @@ class Telefono:
         if self.bloqueado:
             print("El teléfono está bloqueado")
         return self.encendido and not self.bloqueado
-    # Instalar aplicaciones desde el AppStore
+    
     def descargar_app(self,name):
         if self.configuracion.datos and self.encendido_y_desbloqueado():
             self.appstore.descargar_app(name)
