@@ -191,7 +191,7 @@ class Telefono:
         # self.datos_activos = False
         # self.modo_avion = False
         
-        # Inicializar componentes internos
+        # Y Nuestros componentes internos (del telefono) van a ser...
         self.contactos = set()
         self.bandeja_entrada_sms = Cola()
         self.historial_sms_enviados = Pila()
@@ -230,9 +230,7 @@ class Telefono:
         self.red_movil_activa = False
     
     def activar_datos(self):
-        # if self.encendido and not self.modo_avion:
-        #     self.datos_activos = True
-        #     self.red_movil_activa = True  # Aseguramos que la red móvil esté activa
+
         if self.encendido_y_desbloqueado():
             self.configuracion.activar_datos()
             self.red_movil_activa = True  # Aseguramos que la red móvil esté activa
@@ -240,21 +238,18 @@ class Telefono:
             raise ValueError("No se pueden activar los datos. El teléfono debe estar encendido y no en modo avión.")
     
     def desactivar_datos(self):
-        # self.datos_activos = False
+
         if self.encendido_y_desbloqueado():
             self.configuracion.desactivar_datos()
     
     def activar_modo_avion(self):
-        # self.modo_avion = True
-        # self.red_movil_activa = False
-        # self.datos_activos = False
+
         if self.encendido_y_desbloqueado():
             self.configuracion.activar_modo_avion()
             self.red_movil_activa = False
     
     def desactivar_modo_avion(self):
-        # self.modo_avion = False
-        # self.activar_red_movil()
+
         if self.encendido_y_desbloqueado():
             self.configuracion.desactivar_modo_avion()
             self.activar_red_movil()
@@ -402,20 +397,26 @@ class Central:
             return True
         return False
     
-    def realizar_llamada(self, origen, destino, duracion):
+    def realizar_llamada(self, origen, destino, duracion): #Obs. Las llamadas que no re puedan concretar es decir que llamao y esta en llamada o quiero llamar y estoy en llamada se van a registrar con el estado "ocupado" mientras que si se cumplen todas las condiciones (mirar metodos) va a figurar el estado en el archivo de registro como "conectada"...
         if self.validar_llamada(origen, destino):
             tiempo = datetime.now()
+            if Central.determinar_estado_llamada(self,destino, tiempo) == "ocupado": # Aca lo que pasa es que al numero que llamamos esta en llamada por lo que se realiza la llamada pero no se llega a conectar
+                estado = "ocupado"
+                self.telefonos_registrados[origen].realizar_llamada(destino)
+                self.registrar_llamada(origen, destino, duracion, tiempo, estado)
+                return False 
+    
+            if Central.determinar_estado_llamada(self,origen, tiempo) == "ocupado":
+                estado = "ocupado"
+                self.registrar_llamada(origen, destino, duracion, tiempo, estado)
+                return False
             estado = self.determinar_estado_llamada(destino, tiempo)
             self.registrar_llamada(origen, destino, duracion, tiempo, estado)
             self.telefonos_registrados[origen].realizar_llamada(destino)
-            #Me la juego...
-            if Central.determinar_estado_llamada(self,destino, tiempo) == "ocupado":
-               return False
-            #SEEEEEE salio biennnn ;););)
             self.telefonos_registrados[destino].recibir_llamada(origen)
             return True
         return False
-    
+
     def enviar_mensaje(self, origen, destino, contenido):
         if self.validar_mensaje(origen, destino):
             tiempo = datetime.now()
@@ -428,9 +429,9 @@ class Central:
     def determinar_estado_llamada(self, destino, tiempo_actual):
         ultima_llamada = self.obtener_ultima_llamada(destino) #Obs.estamos trabajando con tumplas donde ultima_llamada = (tiempo,duracion)
         if ultima_llamada:
-            tiempo_ultima_llamada, duracion_ultima_llamada = ultima_llamada #Obs. desempaquetado de la tumpla donde asigno a tiempo_ultima_llamda el valor tiempo que tiene el tiempo en el que se realizo la ultima llamada del teleofno de destino y a la variable duracion_ultima_llamdad se le asigna el valor duracion que es la duracion (en seg) de la ultima llamda que realizo el numero al que estamos llamando, num de destino.
+            tiempo_ultima_llamada, duracion_ultima_llamada, estado = ultima_llamada #Obs. desempaquetado de la tumpla donde asigno a tiempo_ultima_llamda el valor tiempo que tiene el tiempo en el que se realizo la ultima llamada del teleofno de destino y a la variable duracion_ultima_llamdad se le asigna el valor duracion que es la duracion (en seg) de la ultima llamda que realizo el numero al que estamos llamando, num de destino.
             tiempo_fin_ultima_llamada = tiempo_ultima_llamada + timedelta(seconds=duracion_ultima_llamada)
-            if tiempo_fin_ultima_llamada >= tiempo_actual:
+            if tiempo_fin_ultima_llamada >= tiempo_actual and estado == "conectado":
                 return "ocupado"
         return "conectado" ###estamos en llamassss ;)
     
@@ -443,10 +444,12 @@ class Central:
             next(reader)  # Saltar la fila de encabezados
             llamadas = list(reader)
             for llamada in reversed(llamadas): #Da vuelta el ordenamiento
-                if llamada[1] == str(numero):  # Si el número es el destino de la llamada
+#                if llamada[1] == str(numero):  # Si el número es el destino de la llamada
+                 if llamada[1] == str(numero) and llamada[4] == "conectado":
                     tiempo = datetime.strptime(llamada[3], '%Y-%m-%d %H:%M:%S.%f')
                     duracion = int(llamada[2])
-                    return tiempo, duracion
+                    estado = llamada[4]
+                    return tiempo, duracion , estado
         return None
     
     def registrar_llamada(self, origen, destino, duracion, tiempo, estado):
@@ -524,7 +527,7 @@ def main():
     ]
     print("Realizando llamadas:")
     for origen, destino, duracion in llamadas:
-        if central.realizar_llamada(origen.numero, destino.numero, duracion):
+        if central.realizar_llamada(origen.numero, destino.numero, duracion) == True:
             print(f"Llamada de {origen.nombre} a {destino.nombre} realizada con éxito (duración: {duracion}s)")
         else:
             print(f"No se pudo realizar la llamada de {origen.nombre} a {destino.nombre}")
@@ -582,7 +585,8 @@ def main():
         except ValueError as e:
             print(f"Error al activar datos en {telefono.nombre}: {e}")
     print()
-
+    #ACA HAY QUE HACER ALGO CON LAS APLICACIONES. 
+    #
     # Descargar una nueva aplicación
     # nueva_app = "Instagram"
     # for telefono in [telefono1, telefono3]:
