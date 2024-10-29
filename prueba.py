@@ -1,49 +1,69 @@
-
-
+import os
+import csv
+import matplotlib.pyplot as plt
+import numpy as np
 cantidad_llamadas = []
 duracion_llamadas = []
 
-def agregar_datos_listas_grafica_lineal_llamadas(estado, duracion):
-    
-    if estado == "conectado":
-        duracion_en_minutos = (int(duracion))//60
-        if duracion_en_minutos in duracion_llamadas:
-            pos = duracion_llamadas.index(duracion_en_minutos)
-            cantidad_llamadas[pos] += 1
-        else:
-            duracion_llamadas.append(duracion_en_minutos)
-            pos_recien_agregado = duracion_llamadas.index(duracion_en_minutos)
-            cantidad_llamadas.append(1)
-
-
-agregar_datos_listas_grafica_lineal_llamadas("conectado", 123)
-agregar_datos_listas_grafica_lineal_llamadas("conectado",63)
-agregar_datos_listas_grafica_lineal_llamadas("conectado",59)
-agregar_datos_listas_grafica_lineal_llamadas("ocupado",14)
-agregar_datos_listas_grafica_lineal_llamadas("ocupado",800)
-agregar_datos_listas_grafica_lineal_llamadas("conectado", 133)
-agregar_datos_listas_grafica_lineal_llamadas("conectado", 143)
-agregar_datos_listas_grafica_lineal_llamadas("conectado",63)
+# def agregar_datos_listas_grafica_lineal_llamadas(estado, duracion):
+#     if estado == "conectado":
+#         duracion_en_minutos = ((int(duracion))//60) + 1 #Ej: Si una llamada dura 61 segundo la tomo como dos minutos, redondeo todo para arriva.
+#         if duracion_en_minutos in duracion_llamadas:
+#             pos = duracion_llamadas.index(duracion_en_minutos)
+#             cantidad_llamadas[pos] += 1
+#         else:
+#             duracion_llamadas.append(duracion_en_minutos)
+#             pos_recien_agregado = duracion_llamadas.index(duracion_en_minutos)
+#             cantidad_llamadas.append(1)
+#     # return False
+# datos_frafica_lineal = [
+#     ("conectado",123),
+#     ("conectado",63),
+#     ("conectado",59),
+#     ("ocupado",14),
+#     ("ocupado",800),
+#     ("conectado", 133),
+#     ("conectado", 143),
+#     ("conectado",63)
+# ]
+# for dato in datos_frafica_lineal:
+#     agregar_datos_listas_grafica_lineal_llamadas(dato[0], dato[1])
+def agregar_datos_diccionario(diccionario, clave):
+    if clave in diccionario:
+        diccionario[clave] += 1
+    else:
+        diccionario[clave] = 1
+def maquinita_de_ayuda():
+    data = {}
+    ruta_archivo = os.path.join('datos', 'llamadas.csv')
+    if not os.path.exists(ruta_archivo):
+        return None
+    with open(ruta_archivo, 'r') as file:
+        reader = csv.reader(file)
+        next(reader)  # Saltar la fila de encabezados
+        llamadas = list(reader)
+        for llamada in (llamadas): 
+             estado = llamada[4]
+             duracion_en_min = ((int(llamada[2]))//60) + 1 #Ej: Si una llamada dura 61 segundo la tomo como dos minutos, redondeo todo para arriba.
+             if estado == "conectado":
+                agregar_datos_diccionario(data, duracion_en_min)
+        return data
+    return None
 
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-def graficar_torta_llamadas(cantidades, duraciones):
-    """
-    Genera un gráfico de torta donde el tamaño de cada sector representa 
-    la cantidad de llamadas y el color representa la duración de dichas llamadas.
-
-    :param cantidades: Lista con las cantidades de llamadas.
-    :param duraciones: Lista con las duraciones correspondientes (en minutos).
-    """
+def graficar_torta_llamadas(diccionario_con_data):
+    duraciones = list(diccionario_con_data.keys())
+    cantidades = list(diccionario_con_data.values())
     # Validamos que ambas listas tengan la misma longitud
     if len(cantidades) != len(duraciones):
         print("Error: Las listas de cantidades y duraciones deben tener la misma longitud.")
         return
 
     # Crear etiquetas para los sectores de la torta
-    etiquetas = [f'Llamadas de {c} minuto/s' for c in cantidades]
+    etiquetas = [f'Llamadas de {c} minuto/s' for c in duraciones]
 
     # Normalizar las duraciones para el color (escala de 0 a 1)
     norm_duraciones = np.array(duraciones) / max(duraciones)
@@ -62,5 +82,5 @@ def graficar_torta_llamadas(cantidades, duraciones):
 
 # Ejemplo de uso
 
-
-graficar_torta_llamadas(cantidad_llamadas, duracion_llamadas)
+dic_con_info = maquinita_de_ayuda()
+graficar_torta_llamadas(dic_con_info)
