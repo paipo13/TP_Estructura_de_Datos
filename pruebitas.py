@@ -408,6 +408,10 @@ class Central:
             estado = self.determinar_estado_llamada(destino, tiempo)
             self.registrar_llamada(origen, destino, duracion, tiempo, estado)
             self.telefonos_registrados[origen].realizar_llamada(destino)
+            #Me la juego...
+            if Central.determinar_estado_llamada(self,destino, tiempo) == "ocupado":
+               return False
+            #SEEEEEE salio biennnn ;););)
             self.telefonos_registrados[destino].recibir_llamada(origen)
             return True
         return False
