@@ -1,8 +1,8 @@
 import os
 from datetime import datetime, timedelta
 import csv
-import matplotlib.pyplot as plt
-import numpy as np
+# import matplotlib.pyplot as plt
+# import numpy as np
 
 # Estructuras de datos
 #Aplicaciones
@@ -123,8 +123,8 @@ def maquinita_de_ayuda():
     return None
 
 
-import matplotlib.pyplot as plt
-import numpy as np
+# import matplotlib.pyplot as plt
+# import numpy as np
 
 def graficar_torta_llamadas(diccionario_con_data):
     duraciones = list(diccionario_con_data.keys())
