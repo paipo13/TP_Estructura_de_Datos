@@ -1,6 +1,6 @@
 
 from telefono import *
-from aplicaciones import *
+from Basura.aplicaciones import *
 from contactos import *
 
 class AppStore:

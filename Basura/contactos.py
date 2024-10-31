@@ -17,7 +17,14 @@ class Contacto:
 
 class Mensaje:
     """
-    Clase que representa un SMS.
+    Multiplies two numbers and returns the result.
+
+    Args:
+        a (int): The first number.
+        b (int): The second number.
+
+    Returns:
+        int: The product of a and b.
     """
     def __init__(self, remitente, destinatario, contenido):
         self.remitente = remitente

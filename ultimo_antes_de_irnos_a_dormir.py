@@ -1,8 +1,8 @@
 import os
 from datetime import datetime, timedelta
 import csv
-# import matplotlib.pyplot as plt
-# import numpy as np
+import matplotlib.pyplot as plt
+import numpy as np
 
 # Estructuras de datos
 #Aplicaciones
@@ -65,12 +65,12 @@ class Appstore:
 #Aplicacion Configuracion
 class Configuracion:
     def __init__(self):
-        self.modo_avion = False
+        self.red_movil = True
         self.datos_activos = False
     
     def activar_modo_avion(self):
-        if self.modo_avion==False:
-            self.modo_avion = True
+        if self.red_movil==True:
+            self.red_movil = False
             print("Modo avion activado")
             if self.datos_activos==True:
                 self.datos_activos = False
@@ -78,14 +78,14 @@ class Configuracion:
         else:
             print("Ya se encuentra en modo avion")
     def desactivar_modo_avion(self):
-        if self.modo_avion==True:
-            self.modo_avion = False
+        if self.red_movil==False:
+            self.red_movil = True
             print("Modo avion desactivado")
         else:
             print("No se encuentra en modo avion")
             
     def activar_datos(self):
-        if self.modo_avion==True:
+        if self.red_movil==True:
             print("No puedes activar los datos en modo avion")
         elif self.datos_activos==False:
             self.datos_activos = True
@@ -249,9 +249,6 @@ class Telefono:
         self.numero = numero
         self.encendido = False
         self.bloqueado = True
-        self.red_movil_activa = False
-        # self.datos_activos = False
-        # self.modo_avion = False
         
         # Y Nuestros componentes internos (del telefono) van a ser...
         self.contactos = set()
@@ -259,7 +256,6 @@ class Telefono:
         self.historial_sms_enviados = Pila()
         self.emails = ListaEnlazada()
         self.historial_llamadas = ListaEnlazada()
-        # self.apps_instaladas = set(["Contactos", "Mensajeria", "Email", "Telefono", "AppStore", "Configuracion"])
         self.appstore=Appstore()
         self.configuracion = Configuracion()
 
@@ -269,6 +265,43 @@ class Telefono:
         if self.bloqueado:
             print("El teléfono está bloqueado")
         return self.encendido and not self.bloqueado
+    # def encender(self,central):
+    #     """Enciende el teléfono y activa la red móvil."""
+    #     if not self.encendido:
+    #         self.encendido = True
+    #         self.desactivar_modo_avion
+    #         print(f"{self.nombre} ha sido encendido.")
+    #         central.registrar_dispositivo(self)
+    #     else:
+    #         print(f"{self.nombre} ya está encendido.")
+            
+
+    # def apagar(self,central):
+    #     """Apaga el teléfono y desactiva todas las conexiones."""
+    #     if self.encendido:
+    #         self.encendido = False
+    #         self.activar_modo_avion
+    #         self.bloqueado = True
+    #         print(f"{self.nombre} ha sido apagado.")
+    #         central.baja_dispositivo(self)
+    #     else:
+    #         print(f"{self.nombre} ya está apagado.")
+
+    # def bloquear(self):
+    #     """Bloquea el teléfono."""
+    #     if not self.bloqueado:
+    #         self.bloqueado = True
+    #         print(f"{self.nombre} ha sido bloqueado.")
+    #     else:
+    #         print(f"{self.nombre} ya está bloqueado.")
+
+    # def desbloquear(self):
+    #     """Desbloquea el teléfono."""
+    #     if self.bloqueado:
+    #         self.bloqueado = False
+    #         print(f"{self.nombre} ha sido desbloqueado.")
+    #     else:
+    #         print(f"{self.nombre} ya está desbloqueado.")
     def encender(self):
         self.encendido = True
         self.activar_red_movil()
@@ -291,39 +324,52 @@ class Telefono:
     def desactivar_red_movil(self):
         self.red_movil_activa = False
     
+    def activar_modo_avion(self):
+        if self.encendido_y_desbloqueado():
+            self.configuracion.activar_modo_avion()
+    def desactivar_modo_avion(self):
+        if self.encendido_y_desbloqueado():
+            self.configuracion.desactivar_modo_avion()
     def activar_datos(self):
-
         if self.encendido_y_desbloqueado():
             self.configuracion.activar_datos()
-            self.red_movil_activa = True  # Aseguramos que la red móvil esté activa
-        else:
-            raise ValueError("No se pueden activar los datos. El teléfono debe estar encendido y no en modo avión.")
-    
     def desactivar_datos(self):
-
         if self.encendido_y_desbloqueado():
             self.configuracion.desactivar_datos()
     
-    def activar_modo_avion(self):
+    # def activar_datos(self):
 
-        if self.encendido_y_desbloqueado():
-            self.configuracion.activar_modo_avion()
-            self.red_movil_activa = False
-    
-    def desactivar_modo_avion(self):
-
-        if self.encendido_y_desbloqueado():
-            self.configuracion.desactivar_modo_avion()
-            self.activar_red_movil()
-    
-    # def abrir_aplicacion(self, nombre_app):
-    #     if self.validar_encendido() and self.validar_desbloqueado():
-    #         if nombre_app in self.apps_instaladas:
-    #             return f"Abriendo {nombre_app}"
-    #         else:
-    #             raise ValueError("Aplicación no encontrada")
+    #     if self.encendido_y_desbloqueado():
+    #         self.configuracion.activar_datos()
+    #         self.red_movil_activa = True  # Aseguramos que la red móvil esté activa
     #     else:
-    #         raise ValueError("El teléfono debe estar encendido y desbloqueado para abrir aplicaciones")
+    #         raise ValueError("No se pueden activar los datos. El teléfono debe estar encendido y no en modo avión.")
+    
+    # def desactivar_datos(self):
+
+    #     if self.encendido_y_desbloqueado():
+    #         self.configuracion.desactivar_datos()
+    
+    # def activar_modo_avion(self):
+
+    #     if self.encendido_y_desbloqueado():
+    #         self.configuracion.activar_modo_avion()
+    #         self.red_movil_activa = False
+    
+    # def desactivar_modo_avion(self):
+
+    #     if self.encendido_y_desbloqueado():
+    #         self.configuracion.desactivar_modo_avion()
+    #         self.activar_red_movil()
+    
+    def abrir_aplicacion(self, nombre_app):
+        if self.validar_encendido() and self.validar_desbloqueado():
+            if nombre_app in self.apps_instaladas:
+                return f"Abriendo {nombre_app}"
+            else:
+                raise ValueError("Aplicación no encontrada")
+        else:
+            raise ValueError("El teléfono debe estar encendido y desbloqueado para abrir aplicaciones")
     
     def agregar_contacto(self, nombre, numero):
         if self.validar_numero_telefono(numero):
@@ -362,22 +408,31 @@ class Telefono:
     
     def recibir_llamada(self, numero):
         self.historial_llamadas.insertar((numero, datetime.now(), "entrante"))
+        
+    # def descargar_app(self,name):
+    #     if self.configuracion.datos_activos and self.encendido_y_desbloqueado():
+    #         self.appstore.descargar_app(name)
+    #     else:
+    #         print('No tiene datos para descargar aplicaciones')
+    # def eliminar_app(self,name):
+    #     if self.encendido_y_desbloqueado():
+    #         self.appstore.eliminar_app(name)
     
-    def descargar_app(self, nombre_app):
-        # if self.validar_encendido() and self.validar_desbloqueado() and self.configuracion.datos_activos:
-        #     self.apps_instaladas.add(nombre_app)
-        if self.configuracion.datos and self.encendido_y_desbloqueado():
-            self.appstore.descargar_app(nombre_app)
+    # def descargar_app(self, nombre_app):
+    #     # if self.validar_encendido() and self.validar_desbloqueado() and self.configuracion.datos_activos:
+    #     #     self.apps_instaladas.add(nombre_app)
+    #     if self.configuracion.datos_activos and self.encendido_y_desbloqueado():
+    #         self.appstore.descargar_app(nombre_app)
 
-        else:
-            raise ValueError("El teléfono debe estar encendido, desbloqueado y con datos activos para descargar aplicaciones")
+    #     else:
+    #         raise ValueError("El teléfono debe estar encendido, desbloqueado y con datos activos para descargar aplicaciones")
     
-    def eliminar_app(self, nombre_app):
-        if nombre_app in self.apps_instaladas:
-            # self.apps_instaladas.remove(nombre_app)
-            self.appstore.eliminar_app(nombre_app)
-        else:
-            raise ValueError("La aplicación no está instalada")
+    # def eliminar_app(self, nombre_app):
+    #     if nombre_app in self.apps_instaladas:
+    #         # self.apps_instaladas.remove(nombre_app)
+    #         self.appstore.eliminar_app(nombre_app)
+    #     else:
+    #         raise ValueError("La aplicación no está instalada")
     
     def ver_historial_llamadas(self):
         return list(self.historial_llamadas)

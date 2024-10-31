@@ -1,6 +1,6 @@
 #Main
 from telefono import *
-from Basura.aplicaciones import *
+from aplicaciones import *
 from listas_enlazadas import *
 from contactos import *
 from listas_enlazadas import * 
