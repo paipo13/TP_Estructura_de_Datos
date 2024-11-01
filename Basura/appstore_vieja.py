@@ -1,5 +1,5 @@
 
-from telefono import *
+from Basura.telefono import *
 from Basura.aplicaciones import *
 from contactos import *
 

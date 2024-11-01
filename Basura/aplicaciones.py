@@ -1,7 +1,7 @@
 #Las aplicaciones permiten realizar llamadas, enviar SMS, gestionar contactos, etc. 
 #Definimos una clase base de aplicaciones y algunas subclases para el manejo de llamadas y mensajes.
 
-from telefono import *
+from Basura.telefono import *
 from datetime import datetime
 class Aplicacion:
     """

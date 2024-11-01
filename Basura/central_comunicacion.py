@@ -1,7 +1,7 @@
 # La clase de Central manejará la comunicación entre teléfonos, verificando si están registrados y 
 # disponibles para realizar llamadas o enviar mensajes.
 
-from telefono import *
+from Basura.telefono import *
 from contactos import *
 from listas_enlazadas import *
 import csv

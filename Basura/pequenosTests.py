@@ -1,4 +1,4 @@
-from telefono import *
+from Basura.telefono import *
 from aplicaciones import *
 from listas_enlazadas import *
 from contactos import *

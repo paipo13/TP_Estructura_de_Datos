@@ -2,7 +2,7 @@
 #Encapsula las funcionalidades básicas del telefono, como encender, apagar, bloquear y desbloquear, 
 # además de interactuar con las aplicaciones. 
 #Validaremos su estado para evitar acciones inválidas (como hacer llamadas cuando está apagado)
-from aplicaciones import *
+from Basura.aplicaciones import *
 from listas_enlazadas import *
 from contactos import *
 from Basura.central_comunicacion import *

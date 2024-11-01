@@ -1,6 +1,6 @@
 #Las clases Contacto y Mensaje encapsulan la información básica necesaria para gestionar la agenda y los SMS.
 
-from telefono import *
+from Basura.telefono import *
 from Basura.central_comunicacion import *
 from listas_enlazadas import *
 
@@ -11,7 +11,7 @@ class Contacto:
     def __init__(self, nombre, numero):
         self.nombre = nombre
         self.numero = numero
-
+ 
     def __str__(self):
         return f"{self.nombre}: {self.numero}"
 
