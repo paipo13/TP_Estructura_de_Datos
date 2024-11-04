@@ -102,7 +102,12 @@ class Telefono:
     def desactivar_datos(self):
         if self.encendido_y_desbloqueado():
             self.configuracion.desactivar_datos()
-    
+            
+    def modo_avion(self):
+       return self.configuracion.modo_avion()    
+   
+    def datos_activos(self):
+        return self.configuracion.datos_activos()
     # def activar_datos(self):
 
     #     if self.encendido_y_desbloqueado():
@@ -129,8 +134,8 @@ class Telefono:
     #         self.activar_red_movil()
     
     def abrir_aplicacion(self, nombre_app):
-        if self.validar_encendido() and self.validar_desbloqueado():
-            if nombre_app in self.apps_instaladas:
+        if self.encendido_y_desbloqueado():
+            if nombre_app in self.appstore.apps_descargadas:
                 return f"Abriendo {nombre_app}"
             else:
                 print ("Aplicación no encontrada")
@@ -152,7 +157,7 @@ class Telefono:
         print ("Contacto no encontrado")
     
     def enviar_mensaje(self, destino, contenido):
-        if self.validar_encendido() and self.validar_desbloqueado() and self.red_movil_activa:
+        if self.encendido_y_desbloqueado and not self.modo_avion:
             self.historial_sms_enviados.push((destino, contenido, datetime.now()))
             return True
         return False
@@ -167,7 +172,7 @@ class Telefono:
             print ("No hay mensajes para eliminar")
     
     def realizar_llamada(self, numero):
-        if self.validar_encendido() and self.validar_desbloqueado() and self.red_movil_activa:
+        if self.encendido_y_desbloqueado and not self.modo_avion:
             self.historial_llamadas.insertar((numero, datetime.now(), "saliente"))
             return True
         return False
@@ -175,14 +180,14 @@ class Telefono:
     def recibir_llamada(self, numero):
         self.historial_llamadas.insertar((numero, datetime.now(), "entrante"))
         
-    # def descargar_app(self,name):
-    #     if self.configuracion.datos_activos and self.encendido_y_desbloqueado():
-    #         self.appstore.descargar_app(name)
-    #     else:
-    #         print('No tiene datos para descargar aplicaciones')
-    # def eliminar_app(self,name):
-    #     if self.encendido_y_desbloqueado():
-    #         self.appstore.eliminar_app(name)
+    def descargar_app(self,name):
+        if self.datos_activos and self.encendido_y_desbloqueado():
+            self.appstore.descargar_app(name)
+        elif not self.datos_activos:
+            print('No tiene datos para descargar aplicaciones')
+    def eliminar_app(self,name):
+        if self.encendido_y_desbloqueado():
+            self.appstore.eliminar_app(name)
     
     # def descargar_app(self, nombre_app):
     #     # if self.validar_encendido() and self.validar_desbloqueado() and self.configuracion.datos_activos:
@@ -231,7 +236,7 @@ class Telefono:
             print ("Orden no válido")
 
     def cambiar_nombre_telefono(self,nuevo_nombre_telefono):
-        if self.validar_encendido() and self.validar_desbloqueado():
+        if self.encendido_y_desbloqueado():
             self.configuracion.cambiar_nombre(nuevo_nombre_telefono)
         else:
             print ("El teléfono debe estar encendido y desbloqueado para cambiar el nombre")

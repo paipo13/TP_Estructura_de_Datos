@@ -58,8 +58,8 @@ class Appstore():
             archivo_data (str): La ruta al archivo CSV que contiene los datos de las aplicaciones.
         """
         self.nombre_app=nombre_app
-        self.apps=set()
-        self.apps_descargadas=set() 
+        self.apps=dict()                  #Los diccoinarois facilitan la buisqueda de apps por nombre.
+        self.apps_descargadas=dict() 
         titulo=True
         with open(archivo_data, mode='r', encoding='utf-8') as archivo_csv:
             lector_csv = csv.reader(archivo_csv)
@@ -68,7 +68,7 @@ class Appstore():
                     titulo=False
                 else:
                     object=App(fila[0],fila[1],fila[2],fila[3],fila[4],fila[5],fila[6],fila[7],fila[8],fila[9],fila[10],fila[11],fila[12])
-                    self.apps.add(object)
+                    self.apps[object.nombre_app]=object
     def descargar_app(self, nombre_app):
         """
         Descarga una aplicación del appstore.
@@ -79,21 +79,19 @@ class Appstore():
         Devuelve:
             None
         """
-        app=None
-        for object in self.apps:
-            if object.nombre_app==nombre_app:
-                app=object
-        if app is None:
-                print("No existe la app deseada.")      
-        elif app not in self.apps_descargadas:
-            self.apps_descargadas.add(app)
-            print(f"Descargada la app {app.nombre_app}")
+        contenido=None
+        if nombre_app not in self.apps:
+            print("No existe la app deseada.")      
+        elif nombre_app not in self.apps_descargadas:
+            contenido=self.apps[nombre_app]
+            self.apps_descargadas[nombre_app]=contenido
+            print(f"Descargada la app {nombre_app}")
         else:
-            print(f"La app {app.nombre_app} ya se encuentra descargada.")
+            print(f"La app {nombre_app} ya se encuentra descargada.")
             
     def eliminar_app(self, nombre_app):
         """
-        Elimina una aplicación del appstore.
+        Elimina una aplicación descargada de la appstore.
 
         Parámetros:
             nombre_app (str): El nombre de la aplicación a eliminar.
@@ -101,15 +99,11 @@ class Appstore():
         Devuelve:
             None
         """
-        app=None
-        for object in self.apps_descargadas:
-            if object.nombre_app==nombre_app:
-                app=object
-        if app is None:
+        if nombre_app not in self.apps_descargadas:
             print(f"La app {nombre_app} a eliminar no esta descargada.")
         else:
-            self.apps_descargadas.remove(app)
-            print(f"Eliminada la app {app.nombre_app}")
+            del self.apps_descargadas[nombre_app]
+            print(f"Fue eliminada la app {nombre_app}")
 
 class Configuracion():
     """
@@ -137,8 +131,7 @@ class Configuracion():
             self.red_movil = False
             print("Modo avion activado")
             if self.datos_activos==True:
-                self.datos_activos = False
-                print("Datos desactivados")
+                self.desactivar_datos
         else:
             print("Ya se encuentra en modo avion")
     def desactivar_modo_avion(self):
@@ -188,7 +181,15 @@ class Configuracion():
         Devuelve:
             bool: True si está en modo avión, False en caso contrario.
         """
-        return self.red_movil
+        return not self.red_movil
+    
+    def datos_activos(self):
+        """
+        Devuelve el estado de los datos activos.
+        
+        Devuelve:
+            bool: True si están activos, False en caso contrario."""
+        return self.datos_activos
 
     def cambiar_nombre(self,nuevo_nombre):
         """

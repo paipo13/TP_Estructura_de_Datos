@@ -11,7 +11,7 @@ def draw_text(text, font, text_col, x, y):
   img = font.render(text, True, text_col)
   pantalla.blit(img, (x, y))
 
-wpp_img = pygame.image.load('wpp.jpg').convert_alpha()
+wpp_img = pygame.image.load('App_con_pygame\wpp.jpg').convert_alpha()
 wpp_button = button.Button(250, 250, wpp_img, 0.1)
 player= pygame.Rect((250,250,40,40))
 run = True
