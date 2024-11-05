@@ -24,6 +24,7 @@ class Telefono:
         self.historial_llamadas = ListaEnlazada()
         self.appstore=Appstore()
         self.configuracion = Configuracion(self.nombre)
+        self.mail = Mail()
 
     def encendido_y_desbloqueado(self):   # devuelve True si el teléfono está encendido y desbloqueado
         if not self.encendido:
@@ -188,6 +189,8 @@ class Telefono:
     def eliminar_app(self,name):
         if self.encendido_y_desbloqueado():
             self.appstore.eliminar_app(name)
+        else:
+            print('No se han podido mostrar mails, debe tener telefono encendido y desbloqueado.')
     
     # def descargar_app(self, nombre_app):
     #     # if self.validar_encendido() and self.validar_desbloqueado() and self.configuracion.datos_activos:
@@ -223,17 +226,11 @@ class Telefono:
     def validar_numero_telefono(self, numero):
         return len(str(numero)) == 10  # Ejemplo simple de validación
     
-    def recibir_email(self, remitente, asunto, contenido, fecha):
-        self.emails.insertar((remitente, asunto, contenido, fecha))
-    
-    def ver_emails(self, orden="no leídos primeros"):
-        emails = list(self.emails)
-        if orden == "no leídos primeros":
-            return sorted(emails, key=lambda x: x[3], reverse=True)
-        elif orden == "por fecha":
-            return sorted(emails, key=lambda x: x[3])
+    def ver_mails(self, orden="no leídos primeros"):
+        if self.encendido_y_desbloqueado:
+            self.mail.ver_mails(orden)
         else:
-            print ("Orden no válido")
+            print ("El teléfono debe estar encendido y desbloqueado para ver los mails")
 
     def cambiar_nombre_telefono(self,nuevo_nombre_telefono):
         if self.encendido_y_desbloqueado():
@@ -243,3 +240,6 @@ class Telefono:
     
     def nombre_telefono(self):
         return self.configuracion.nombre_telefono
+    
+    
+

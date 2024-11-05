@@ -4,7 +4,17 @@ from central import *
 from estructuras_de_datos import *
 from telefono_final import *
 
+import random , datetime
 
+def generar_correos():
+    correos = []  # Lista vacía para almacenar los correos
+    for _ in range(20):
+        mensaje = f"Mensaje {_ + 1}"  # Mensaje único
+        estado = random.choice(['leido', 'no leido'])  # Estado aleatorio
+        fecha = datetime.datetime(random.randint(1990,2024),random.randint(1,12), random.randint(1,25), random.randint(0,23), random.randint(0,59))
+        correo = [mensaje, fecha, estado]  # Formato del correo
+        correos.append(correo)
+    return correos
 def main():
     central = Central()
     
@@ -42,7 +52,7 @@ def main():
         telefono.desbloquear()
         print(f"{telefono.nombre_telefono()} {telefono.modelo} encendido y desbloqueado.")
     print()
-
+    
     # Agregar contactos
     contactos = [
         (telefono1, "Alice", 9876543210),
@@ -85,7 +95,16 @@ def main():
         else:
             print(f"No se pudo enviar el mensaje de {origen.nombre_telefono()} a {destino.nombre_telefono()}")
     print()
-
+    
+    # Mostrar mails
+    print("Mostrando mails:")
+    for telefono in [telefono1, telefono2, telefono3, telefono4]:
+        telefono.mail.bandeja  = generar_correos()
+        print(f"Mails de {telefono.nombre_telefono()}:")
+        telefono.ver_mails('no leidos primero')
+        telefono.ver_mails('por fecha')
+        print()
+    
     # Mostrar historial de llamadas y mensajes
     for telefono in [telefono1, telefono2, telefono3, telefono4]:
         print(f"Historial de llamadas de {telefono.nombre_telefono()}:")

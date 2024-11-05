@@ -1,5 +1,5 @@
 import csv
-
+from estructuras_de_datos import *
 class App():
     """
     Clase que representa una colección de aplicaciones.
@@ -205,6 +205,51 @@ class Configuracion():
         print(f"Nombre cambiado a {self.nombre_telefono}")
 
 
+class Mail():
+    """
+    Clase que representa un correo electrónico.
+    """
+    def __init__(self):
+        """
+        Inicializa el correo con una lista vacía de mensajes.
+        """
+        self.bandeja = []
+    def ver_mails(self,orden):
+        if orden == 'no leidos primero':
+            print('Correos ordenados segun no leidos primero:')
+            correos =  sorted(self.bandeja, key=lambda x: (x[2]), reverse=True)
+            for cosa in correos:
+                cosa[1] = cosa[1].strftime("%Y-%m-%d %H:%M") 
+                print(cosa)
+        elif orden == 'por fecha':
+            print('Correos ordenados segun fecha:')
+            correos =  sorted(self.bandeja, key=lambda x: (x[1]), reverse=True)
+            for cosa in correos:
+                print((cosa))
+                
+            
+
+# Lo que iria en el main de parte MAIL:
+import random , datetime
+# telefono1 = Telefono( "iPhone", "12 Pro", "iOS", "14.5", 6, 128, 1234567890)
+def generar_correos():
+    correos = []  # Lista vacía para almacenar los correos
+    for _ in range(20):
+        mensaje = f"Mensaje {_ + 1}"  # Mensaje único
+        estado = random.choice(['leido', 'no leido'])  # Estado aleatorio
+        fecha = datetime.datetime(random.randint(1990,2024),random.randint(1,12), random.randint(1,25), random.randint(0,23), random.randint(0,59))
+        correo = [mensaje, fecha, estado]  # Formato del correo
+        correos.append(correo)
+    return correos
+
+# print(telefono1.encendido_y_desbloqueado())  PROBLEMA: aunque no este prendido o desbloq me muestra los mails
+# # if telefono1.encendido_y_desbloqueado():
+# telefono1.mail.bandeja  = generar_correos()
+# telefono1.ver_mails('no leidos primero')
+# telefono1.ver_mails('por fecha')
+
+
+    
 
 ##### HACER APLICACION LLAMADA #####
 
