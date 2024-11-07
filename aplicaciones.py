@@ -1,6 +1,7 @@
 import csv
 from estructuras_de_datos import *
 from datetime import datetime
+import random
 class App():
     """
     Clase que representa una colección de aplicaciones.
