@@ -176,6 +176,9 @@ def main():
     # print(telefono1.ver_emails("por fecha"))
     # print()
 
+    # Usar la app de Paint
+    telefono1.usar_paint()
+    
     # Mostrar registros de la central
     print("Registros de la central:")
     central.mostrar_registros()

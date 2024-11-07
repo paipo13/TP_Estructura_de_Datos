@@ -1,5 +1,6 @@
 import csv
 from estructuras_de_datos import *
+from datetime import datetime
 class App():
     """
     Clase que representa una colección de aplicaciones.
@@ -235,7 +236,6 @@ class Mail():
             
 
 # Lo que iria en el main de parte MAIL:
-import random , datetime
 # telefono1 = Telefono( "iPhone", "12 Pro", "iOS", "14.5", 6, 128, 1234567890)
 def generar_correos():
     correos = []  # Lista vacía para almacenar los correos
@@ -253,8 +253,89 @@ def generar_correos():
 # telefono1.ver_mails('no leidos primero')
 # telefono1.ver_mails('por fecha')
 
+class Llamada:
+    """
+    Clase que representa una app de llamadas.
+    """
+    def __init__(self):
+        self.historial_llamadas = ListaEnlazada()
+    def realizar_llamada(self, numero):
+        """Simula la realizacion de una llamada.
 
+        Args:
+            numero (int): Numero al que se le realiza la llamada.
+
+        """
+        self.historial_llamadas.insertar((numero, datetime.now(), "saliente"))
     
+    def recibir_llamada(self, numero):
+        """Simula el recibimiento de una llamada.
+
+        Args:
+            numero (int): Numero del cual recibo la llamada.
+            
+        Returns: None.
+        """
+        self.historial_llamadas.insertar((numero, datetime.now(), "entrante"))
+        
+    def ver_historial_llamadas(self):
+        """Devuelve el historial de llamadas del telefono como lista.
+
+        Returns:
+            list: Una lista con historial de llamadas.
+        """
+        return list(self.historial_llamadas)
+    
+class Mensajeria:
+    """
+    Clase que representa una app de mensajes.
+    """
+    def __init__(self):
+        self.bandeja_entrada_sms = Cola()
+        self.historial_sms_enviados = Pila()
+    
+    def enviar_mensaje(self, destino, contenido):
+        """Simula enviado de mensaje a otro telefono. 
+
+        Args:
+            destino (int): Numero de destino.
+            contenido (int): Numero de contenido.
+        """
+        self.historial_sms_enviados.push((destino, contenido, datetime.now()))
+        
+    def recibir_mensaje(self, origen, contenido):
+        """Simula el recibimiento de un mensaje. 
+
+        Args:
+            origen (int): Telefono de origen del mensaje.
+            contenido (str): Contenido del mensaje.
+            
+        Devuelve: None
+        """
+        self.bandeja_entrada_sms.enqueue((origen, contenido, datetime.now()))
+        
+    def eliminar_mensaje(self):
+        ################################################################CHEQUEAR ESTO 
+        if not self.bandeja_entrada_sms.esta_vacia():
+            return self.bandeja_entrada_sms.dequeue()
+        else:
+            print ("No hay mensajes para eliminar")
+            
+    def ver_bandeja_entrada_sms(self):
+        """Devuelve la bandeja de entrada de sms como lista. 
+
+        Returns:
+            list: Una lista con todos los mensajes recibidos de sms.
+        """
+        return list(self.bandeja_entrada_sms.items)
+    
+    def ver_historial_sms_enviados(self):
+        """Devuelve el historial de mensajes sms enviados como lista.
+
+        Returns:
+            list: Una lista con todos los mensajes enviados de sms.
+        """
+        return list(self.historial_sms_enviados.items)
 
 ##### HACER APLICACION LLAMADA #####
 

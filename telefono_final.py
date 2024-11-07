@@ -2,6 +2,7 @@ import datetime
 from estructuras_de_datos import *
 from aplicaciones import *
 import uuid
+from paint import *
 
 class Telefono:
     """Clase que representa un telefono celular con sus acciones incorporadas.
@@ -31,13 +32,13 @@ class Telefono:
         
         # Y Nuestros componentes internos (del telefono) van a ser...
         self.contactos = set()
-        self.bandeja_entrada_sms = Cola()
-        self.historial_sms_enviados = Pila()
         self.emails = ListaEnlazada()
-        self.historial_llamadas = ListaEnlazada()
+        self.mensajeria=Mensajeria()
+        self.app_llamada = Llamada()
         self.appstore=Appstore()
         self.configuracion = Configuracion(self.nombre)
         self.mail = Mail()
+        self.paint = Paint()
 
     def encendido_y_desbloqueado(self):   # devuelve True si el teléfono está encendido y desbloqueado
         """Devuelve el estado encendido y desbloqueado juntos.
@@ -237,7 +238,7 @@ class Telefono:
             bool: True si se pudo enviar el mensaje, False de lo contrario.
         """
         if self.encendido_y_desbloqueado and not self.modo_avion:
-            self.historial_sms_enviados.push((destino, contenido, datetime.now()))
+            self.mensajeria.enviar_mensaje(destino,contenido)
             return True
         return False
     
@@ -250,14 +251,11 @@ class Telefono:
             
         Devuelve: None
         """
-        self.bandeja_entrada_sms.enqueue((origen, contenido, datetime.now()))
+        self.mensajeria.recibir_mensaje(origen,contenido)
     
     def eliminar_mensaje(self):
         ################################################################CHEQUEAR ESTO 
-        if not self.bandeja_entrada_sms.esta_vacia():
-            return self.bandeja_entrada_sms.dequeue()
-        else:
-            print ("No hay mensajes para eliminar")
+        self.mensajeria.eliminar_mensaje()
     
     def realizar_llamada(self, numero):
         """Simula la realizacion de una llamada.
@@ -269,7 +267,7 @@ class Telefono:
             bool: True si se realizo la llamada, False de lo contrario.
         """
         if self.encendido_y_desbloqueado and not self.modo_avion:
-            self.historial_llamadas.insertar((numero, datetime.now(), "saliente"))
+            self.app_llamada.realizar_llamada(numero)
             return True
         return False
     
@@ -281,7 +279,7 @@ class Telefono:
             
         Returns: None.
         """
-        self.historial_llamadas.insertar((numero, datetime.now(), "entrante"))
+        self.app_llamada.recibir_llamada(numero)
         
     def descargar_app(self,name):
         """Simula el descargado de una app en el telefono usando la appstore.
@@ -306,7 +304,7 @@ class Telefono:
         if self.encendido_y_desbloqueado():
             self.appstore.eliminar_app(name)
         else:
-            print('No se han podido mostrar mails, debe tener telefono encendido y desbloqueado.')
+            print('No se ha podido eliminar la app, debe tener telefono encendido y desbloqueado.')
     
     # def descargar_app(self, nombre_app):
     #     # if self.validar_encendido() and self.validar_desbloqueado() and self.configuracion.datos_activos:
@@ -330,7 +328,7 @@ class Telefono:
         Returns:
             list: Una lista con historial de llamadas.
         """
-        return list(self.historial_llamadas)
+        return self.app_llamada.ver_historial_llamadas
     
     def ver_bandeja_entrada_sms(self):
         """Devuelve la bandeja de entrada de sms como lista. 
@@ -338,7 +336,7 @@ class Telefono:
         Returns:
             list: Una lista con todos los mensajes recibidos de sms.
         """
-        return list(self.bandeja_entrada_sms.items)
+        return self.mensajeria.ver_bandeja_entrada_sms()
     
     def ver_historial_sms_enviados(self):
         """Devuelve el historial de mensajes sms enviados como lista.
@@ -346,7 +344,7 @@ class Telefono:
         Returns:
             list: Una lista con todos los mensajes enviados de sms.
         """
-        return list(self.historial_sms_enviados.items)
+        return self.mensajeria.ver_historial_sms_enviados()
     
     def validar_encendido(self):
         return self.encendido
@@ -384,7 +382,13 @@ class Telefono:
             print ("El teléfono debe estar encendido y desbloqueado para cambiar el nombre")
     
     def nombre_telefono(self):
+        '''Devuelve el nombre del telefono en el momento de ejecucion.'''
         return self.configuracion.nombre_telefono
     
-    
-
+    def usar_paint(self):
+        """Simula el uso de la app paint para dibujar en el telefono.
+        """
+        if self.encendido_y_desbloqueado():
+            self.paint.dibujar()
+        else:
+            print ("El teléfono debe estar encendido y desbloqueado para usar la app paint")
