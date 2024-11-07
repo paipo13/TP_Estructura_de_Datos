@@ -100,7 +100,7 @@ class Central:
             return True
         return False
     
-    def realizar_llamada(self, origen, destino, duracion): #Obs. Las llamadas que no re puedan concretar es decir que llamao y esta en llamada o quiero llamar y estoy en llamada se van a registrar con el estado "ocupado" mientras que si se cumplen todas las condiciones (mirar metodos) va a figurar el estado en el archivo de registro como "conectada"...
+    def realizar_llamada(self, origen, destino,tiempo, duracion): #Obs. Las llamadas que no re puedan concretar es decir que llamao y esta en llamada o quiero llamar y estoy en llamada se van a registrar con el estado "ocupado" mientras que si se cumplen todas las condiciones (mirar metodos) va a figurar el estado en el archivo de registro como "conectada"...
         """Simula la realizacion de una llamada desde la central.
 
         Args:
@@ -112,7 +112,6 @@ class Central:
             bool: True si se pudo realizar la llamada, False de lo contrario.
         """
         if self.validar_llamada(origen, destino):
-            tiempo = datetime.now()
             if Central.determinar_estado_llamada(self,destino, tiempo) == "ocupado": # Aca lo que pasa es que al numero que llamamos esta en llamada por lo que se realiza la llamada pero no se llega a conectar
                 estado = "ocupado"
                 self.telefonos_registrados[origen].realizar_llamada(destino)
@@ -130,7 +129,7 @@ class Central:
             return True
         return False
 
-    def enviar_mensaje(self, origen, destino, contenido):
+    def enviar_mensaje(self, origen, destino, tiempo, contenido):
         """Simula el enviado de un mensaje desde la central.
 
         Args:
@@ -142,7 +141,6 @@ class Central:
             bool: True si se pudo enviar el mensaje correctamente, False de lo contrario.
         """
         if self.validar_mensaje(origen, destino):
-            tiempo = datetime.now()
             self.registrar_mensaje(origen, destino, contenido, tiempo)
             self.telefonos_registrados[origen].enviar_mensaje(destino, contenido)
             self.telefonos_registrados[destino].recibir_mensaje(origen, contenido)
@@ -169,7 +167,7 @@ class Central:
             for llamada in reversed(llamadas): #Da vuelta el ordenamiento
 #                if llamada[1] == str(numero):  # Si el número es el destino de la llamada
                  if llamada[1] == str(numero) and llamada[4] == "conectado":
-                    tiempo = datetime.strptime(llamada[3], '%Y-%m-%d %H:%M:%S.%f')
+                    tiempo = datetime.strptime(llamada[3], '%Y-%m-%d %H:%M:%S')
                     duracion = int(llamada[2])
                     estado = llamada[4]
                     return tiempo, duracion , estado
@@ -183,7 +181,7 @@ class Central:
     
     def registrar_mensaje(self, origen, destino, contenido, tiempo):
         ruta_archivo = os.path.join('datos', 'mensajes.csv')
-        with open(ruta_archivo, 'a', newline='') as file:
+        with open(ruta_archivo, 'a', newline='', encoding= 'utf-8') as file:
             writer = csv.writer(file)
             writer.writerow([origen, destino, contenido, tiempo])
     

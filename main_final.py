@@ -19,10 +19,10 @@ def main():
     central = Central()
     
     # Crear teléfonos
-    telefono1 = Telefono( "iPhone", "12 Pro", "iOS", "14.5", 6, 128, 1234567890)
-    telefono2 = Telefono( "Samsung", "Galaxy S21", "Android", "11", 8, 256, 9876543210)
-    telefono3 = Telefono( "Google", "Pixel 5", "Android", "12", 8, 128, 5555555555)
-    telefono4 = Telefono( "Xiaomi", "Mi 11", "Android", "11", 8, 256, 1112223333)
+    telefono1 = Telefono( "iPhone", "12 Pro", "iOS", "14.5", 6, 128, 1234567890, central)
+    telefono2 = Telefono( "Samsung", "Galaxy S21", "Android", "11", 8, 256, 9876543210, central)
+    telefono3 = Telefono( "Google", "Pixel 5", "Android", "12", 8, 128, 5555555555, central)
+    telefono4 = Telefono( "Xiaomi", "Mi 11", "Android", "11", 8, 256, 1112223333, central)
     
 
     #cambio nombre telefono 
@@ -75,7 +75,7 @@ def main():
     ]
     print("Realizando llamadas:")
     for origen, destino, duracion in llamadas:
-        if central.realizar_llamada(origen.numero, destino.numero, duracion) == True:
+        if central.realizar_llamada(origen.numero, destino.numero, datetime.datetime(2022, 5, 7, 15), duracion) == True:
             print(f"Llamada de {origen.nombre_telefono()} a {destino.nombre_telefono()} realizada con éxito (duración: {duracion}s)")
         else:
             print(f"No se pudo realizar la llamada de {origen.nombre_telefono()} a {destino.nombre_telefono()}")
@@ -90,7 +90,7 @@ def main():
     ]
     print("Enviando mensajes:")
     for origen, destino, contenido in mensajes:
-        if central.enviar_mensaje(origen.numero, destino.numero, contenido):
+        if central.enviar_mensaje(origen.numero, destino.numero, datetime.datetime(2024, 2, 1, 10, 30), contenido):
             print(f"Mensaje de {origen.nombre_telefono()} a {destino.nombre_telefono()} enviado con éxito")
         else:
             print(f"No se pudo enviar el mensaje de {origen.nombre_telefono()} a {destino.nombre_telefono()}")
@@ -115,13 +115,13 @@ def main():
 
     # Activar modo avión en un teléfono
     telefono2.activar_modo_avion()
-    central.actualizar_modo_avion(telefono2.numero, True)
+    # central.actualizar_modo_avion(telefono2.numero, True)
     print(f"Modo avión activado en {telefono2.nombre_telefono()}")
     print()
 
     # Intentar llamar a un teléfono en modo avión
     print(f"Intentando llamar a {telefono2.nombre_telefono()} (en modo avión):")
-    if central.realizar_llamada(telefono1.numero, telefono2.numero, 45):
+    if central.realizar_llamada(telefono1.numero, telefono2.numero,datetime.datetime(2024, 8, 8, 12, 20, 10), 45):
         print("Llamada realizada con éxito (esto no debería ocurrir)")
     else:
         print("No se pudo realizar la llamada (comportamiento esperado)")
@@ -129,7 +129,7 @@ def main():
 
     # Desactivar modo avión
     telefono2.desactivar_modo_avion()
-    central.actualizar_modo_avion(telefono2.numero, False)
+    # central.actualizar_modo_avion(telefono2.numero, False)
     print(f"Modo avión desactivado en {telefono2.nombre_telefono()}")
     print()
 
@@ -142,22 +142,11 @@ def main():
         except ValueError as e:
             print(f"Error al activar datos en {telefono.nombre_telefono()}: {e}")
     print()
-    #ACA HAY QUE HACER ALGO CON LAS APLICACIONES. 
-    #
-    # Descargar una nueva aplicación
-    # nueva_app = "Instagram"
-    # for telefono in [telefono1, telefono3]:
-    #     try:
-    #         telefono.descargar_app(nueva_app)
-    #         print(f"{nueva_app} descargada en {telefono.nombre}")
-    #     except ValueError as e:
-    #         print(f"Error al descargar {nueva_app} en {telefono.nombre}: {e}")
-    # print()
 
     # Simular una llamada ocupada
     print("Simulando una llamada ocupada:")
-    central.realizar_llamada(telefono3.numero, telefono4.numero, 120)  # Llamada larga en curso
-    if central.realizar_llamada(telefono1.numero, telefono4.numero, 30):
+    central.realizar_llamada(telefono3.numero, telefono4.numero, datetime.datetime(2023, 12, 25, 0, 1, 20), 120)  # Llamada larga en curso
+    if central.realizar_llamada(telefono1.numero, telefono4.numero,datetime.datetime(2023, 12, 25, 0, 2, 20), 30):
         print(f"Llamada de {telefono1.nombre_telefono()} a {telefono4.nombre_telefono()} realizada con éxito (esto no debería ocurrir)")
     else:
         print(f"No se pudo realizar la llamada de {telefono1.nombre_telefono()} a {telefono4.nombre_telefono()} (teléfono ocupado)")
@@ -175,6 +164,27 @@ def main():
     # print(telefono1.ver_emails("no leídos primeros"))
     # print(telefono1.ver_emails("por fecha"))
     # print()
+    telefono1.activar_datos()
+    telefono2.desactivar_datos()
+    #Descargar app exitosamente
+    telefono1.descargar_app('Coloring book moana')
+    print(f'Coloring book moana descargada en {telefono1.nombre_telefono()}')
+    
+    #Simular falla de descarga por ya tener la app descargada
+    telefono1.descargar_app('Coloring book moana')
+    
+    #Simular falla de descarga por app inexistente
+    telefono1.descargar_app('App_inexistente')
+    
+    #Simular falla de descarga por tener datos desacticados
+    telefono2.descargar_app('Coloring book moana')
+    
+    #Eliminar app exitosamente
+    telefono1.eliminar_app('Coloring book moana')
+    
+    #Simular falla de eliminar app por no tenerla instalada
+    telefono1.eliminar_app('Infinite Painter')
+    
 
     # Usar la app de Paint
     telefono1.usar_paint()

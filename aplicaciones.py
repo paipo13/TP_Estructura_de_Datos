@@ -185,7 +185,7 @@ class Configuracion():
         """
         return not self.red_movil
     
-    def datos_activos(self):
+    def datos_activos_conf(self):
         """
         Devuelve el estado de los datos activos.
         
