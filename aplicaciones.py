@@ -154,8 +154,8 @@ class Configuracion():
         Devuelve:
             None
         """
-        if self.red_movil==True:
-            print("No puedes activar los datos en modo avion")
+        if self.red_movil==False:
+            print("No puedes activar los datos en modo avion(red desactivada)")
         elif self.datos_activos==False:
             self.datos_activos = True
             print("Datos activados")   
@@ -215,6 +215,11 @@ class Mail():
         """
         self.bandeja = []
     def ver_mails(self,orden):
+        """Visualiza los mails por pantalla.
+
+        Parametros:
+            orden (str): El orden segun se quieren visualizar los mails.
+        """
         if orden == 'no leidos primero':
             print('Correos ordenados segun no leidos primero:')
             correos =  sorted(self.bandeja, key=lambda x: (x[2]), reverse=True)

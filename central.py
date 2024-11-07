@@ -3,12 +3,20 @@ import os
 from datetime import datetime, timedelta
 
 class Central:
+    """Clase que representa una central de red con sus funcionalidades.
+    """
     def __init__(self):
+        """Inicializa una central.
+        """
         self.telefonos_registrados = {}
         self.telefono_modo_avion = {}
         self.inicializar_archivos()
     
     def inicializar_archivos(self):
+        """Inicializa archivos de llamadas y mensajes en la central.
+        
+        Returns: None 
+        """
         if not os.path.exists('datos'):
             os.makedirs('datos')
         
@@ -23,19 +31,50 @@ class Central:
                         writer.writerow(['origen', 'destino', 'contenido', 'tiempo'])
     
     def registrar_telefono(self, telefono):
+        """Registra un telefono en la central.
+
+        Args:
+            telefono (int): El objeto telefono a registrar.
+            
+        Returns: None.
+        """
         self.telefonos_registrados[telefono.numero] = telefono
         self.telefono_modo_avion[telefono.numero] = False
     
     def desregistrar_telefono(self, telefono):
+        """Desregistra un telefono de la central 
+
+        Args:
+            telefono (int): El objeto telefono a desregistrar.
+            
+        Returns: None.
+        """
         if telefono.numero in self.telefonos_registrados:
             del self.telefonos_registrados[telefono.numero]
             del self.telefono_modo_avion[telefono.numero]
     
     def actualizar_modo_avion(self, numero, estado):
+        """Actualiza el estado de un telefono en el diccionario telefono_modo_avion.
+
+        Args:
+            numero (int): numero de telefono.
+            estado (bool): True si quiero que el estado pase a true, sino False.
+            
+        Returns: None.
+        """
         if numero in self.telefono_modo_avion:
             self.telefono_modo_avion[numero] = estado
     
     def validar_llamada(self, origen, destino):
+        """Valida que una llamada tenga todos los requisitos para poder realizarse.
+
+        Args:
+            origen (int): Numero de telefono de origen de llamada.
+            destino (int): Numero de telefono de destino de llamada.
+
+        Returns:
+            bool: True si se puede realizar la llamada, False si no se deberia poder realizar la llamada.
+        """
         if (origen in self.telefonos_registrados and destino in self.telefonos_registrados and
             not self.telefono_modo_avion[origen] and not self.telefono_modo_avion[destino] and
             self.telefonos_registrados[origen].validar_encendido() and
@@ -45,6 +84,15 @@ class Central:
         return False
     
     def validar_mensaje(self, origen, destino):
+        """Valida que al enviar un mensaje se cumplan los requisitos para que este se pueda enviar. 
+
+        Args:
+            origen (int): Numero de telefono de origen.
+            destino (int): Numero de telefono de destino.
+
+        Returns:
+            bool: True si se puede enviar el mensaje, False si no deberia poderse.
+        """
         if (origen in self.telefonos_registrados and destino in self.telefonos_registrados and
             not self.telefono_modo_avion[origen] and not self.telefono_modo_avion[destino] and
             self.telefonos_registrados[origen].validar_encendido() and
@@ -53,6 +101,16 @@ class Central:
         return False
     
     def realizar_llamada(self, origen, destino, duracion): #Obs. Las llamadas que no re puedan concretar es decir que llamao y esta en llamada o quiero llamar y estoy en llamada se van a registrar con el estado "ocupado" mientras que si se cumplen todas las condiciones (mirar metodos) va a figurar el estado en el archivo de registro como "conectada"...
+        """Simula la realizacion de una llamada desde la central.
+
+        Args:
+            origen (int): Numero de origen de llamada.
+            destino (int): Numero de destino de llamada.
+            duracion (int): Durecion de la llamada en segundos. 
+
+        Returns:
+            bool: True si se pudo realizar la llamada, False de lo contrario.
+        """
         if self.validar_llamada(origen, destino):
             tiempo = datetime.now()
             if Central.determinar_estado_llamada(self,destino, tiempo) == "ocupado": # Aca lo que pasa es que al numero que llamamos esta en llamada por lo que se realiza la llamada pero no se llega a conectar
@@ -73,6 +131,16 @@ class Central:
         return False
 
     def enviar_mensaje(self, origen, destino, contenido):
+        """Simula el enviado de un mensaje desde la central.
+
+        Args:
+            origen (int): Numero de origen del mensaje.
+            destino (int): Numero de destino del mensaje.
+            contenido (str): Contenido del mensaje.
+
+        Returns:
+            bool: True si se pudo enviar el mensaje correctamente, False de lo contrario.
+        """
         if self.validar_mensaje(origen, destino):
             tiempo = datetime.now()
             self.registrar_mensaje(origen, destino, contenido, tiempo)

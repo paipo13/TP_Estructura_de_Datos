@@ -163,18 +163,18 @@ def main():
         print(f"No se pudo realizar la llamada de {telefono1.nombre_telefono()} a {telefono4.nombre_telefono()} (teléfono ocupado)")
     print()
 
-    # Mostrar emails (simulado)
-    print(f"Emails de {telefono1.nombre_telefono()}:")
-    emails_simulados = [
-        ("sender1@example.com", "Asunto 1", "Contenido del email 1", datetime.now() - timedelta(days=1)),
-        ("sender2@example.com", "Asunto 2", "Contenido del email 2", datetime.now() - timedelta(hours=5)),
-        ("sender3@example.com", "Asunto 3", "Contenido del email 3", datetime.now() - timedelta(minutes=30))
-    ]
-    for email in emails_simulados:
-        telefono1.recibir_email(*email)
-    print(telefono1.ver_emails("no leídos primeros"))
-    print(telefono1.ver_emails("por fecha"))
-    print()
+    # # Mostrar emails (simulado)
+    # print(f"Emails de {telefono1.nombre_telefono()}:")
+    # emails_simulados = [
+    #     ("sender1@example.com", "Asunto 1", "Contenido del email 1", datetime.now() - timedelta(days=1)),
+    #     ("sender2@example.com", "Asunto 2", "Contenido del email 2", datetime.now() - timedelta(hours=5)),
+    #     ("sender3@example.com", "Asunto 3", "Contenido del email 3", datetime.now() - timedelta(minutes=30))
+    # ]
+    # for email in emails_simulados:
+    #     telefono1.recibir_email(*email)
+    # print(telefono1.ver_emails("no leídos primeros"))
+    # print(telefono1.ver_emails("por fecha"))
+    # print()
 
     # Mostrar registros de la central
     print("Registros de la central:")
