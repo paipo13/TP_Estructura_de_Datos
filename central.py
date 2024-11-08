@@ -148,6 +148,11 @@ class Central:
         return False
     
     def determinar_estado_llamada(self, destino, tiempo_actual):
+        """ Determina el estado que daria cuando se quiere realizar una llamada. Que puede ser ocupado o conectado
+        
+        Returns: 
+            str: Estado de la llamada que puede ser "conectado" o "ocupado".
+        """
         ultima_llamada = self.obtener_ultima_llamada(destino) #Obs.estamos trabajando con tumplas donde ultima_llamada = (tiempo,duracion)
         if ultima_llamada:
             tiempo_ultima_llamada, duracion_ultima_llamada, estado = ultima_llamada #Obs. desempaquetado de la tumpla donde asigno a tiempo_ultima_llamda el valor tiempo que tiene el tiempo en el que se realizo la ultima llamada del teleofno de destino y a la variable duracion_ultima_llamdad se le asigna el valor duracion que es la duracion (en seg) de la ultima llamda que realizo el numero al que estamos llamando, num de destino.
@@ -157,6 +162,14 @@ class Central:
         return "conectado" ###estamos en llamassss ;)
     
     def obtener_ultima_llamada(self, numero):
+        """Obtiene la ultima llamada del archivo llamadas.csv en base a un numero de telefono.
+
+        Args:
+            numero (int): Numero de telefono en base al que se busca.
+
+        Returns:
+            bool: None si no encuentra una llamada de ese numero, y sino devuelve 3 cosas: tiempo, duracion y estado de la llamada.
+        """
         ruta_archivo = os.path.join('datos', 'llamadas.csv')
         if not os.path.exists(ruta_archivo):
             return None
@@ -174,18 +187,38 @@ class Central:
         return None
     
     def registrar_llamada(self, origen, destino, duracion, tiempo, estado):
+        """Registra una llamada, es decir, la agrega en el archivo csv de llamadas.
+
+        Args:
+            origen (int): Numero de telefono de origen.
+            destino (int): Numero de telefono de destino.
+            duracion (int): Duracion de la llamada.
+            tiempo (datetime): Tiempo en el que se realizo la llamada.
+            estado (str): Si se conecto o no se conecto la llamada.
+        """
         ruta_archivo = os.path.join('datos', 'llamadas.csv')
         with open(ruta_archivo, 'a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([origen, destino, duracion, tiempo, estado])
     
     def registrar_mensaje(self, origen, destino, contenido, tiempo):
+        """Registra un mensaje, es decir, lo agrega al archivo csv de mensajes.
+
+        Args:
+            origen (int): Numeo de origen del mensaje.
+            destino (int): Numero de destino del mensaje.
+            contenido (str): Contenido del mensaje. 
+            tiempo (datetime): Tiempo en el que se mando el mensaje.
+        """
         ruta_archivo = os.path.join('datos', 'mensajes.csv')
         with open(ruta_archivo, 'a', newline='', encoding= 'utf-8') as file:
             writer = csv.writer(file)
             writer.writerow([origen, destino, contenido, tiempo])
     
     def mostrar_registros(self):
+        """Muestra por pantalla tanto el registro de llamadas como el de mensajes de la central. 
+        Es decir, muestra el contenido de los archivos.
+        """
         print("Registro de llamadas:")
         ruta_archivo = os.path.join('datos', 'llamadas.csv')
         with open(ruta_archivo, 'r') as file:

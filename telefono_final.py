@@ -59,8 +59,6 @@ class Telefono:
             print(f"{self.nombre} ha sido encendido.")
         else:
             print(f"{self.nombre} ya está encendido.")
-            
-
     def apagar(self):
         """Apaga el teléfono y desactiva todas las conexiones."""
         if self.encendido:
@@ -70,7 +68,6 @@ class Telefono:
             print(f"{self.nombre} ha sido apagado.")
         else:
             print(f"{self.nombre} ya está apagado.")
-
     def bloquear(self):
         """Bloquea el teléfono."""
         if not self.bloqueado:
@@ -78,7 +75,6 @@ class Telefono:
             print(f"{self.nombre} ha sido bloqueado.")
         else:
             print(f"{self.nombre} ya está bloqueado.")
-
     def desbloquear(self):
         """Desbloquea el teléfono."""
         if self.bloqueado:
@@ -86,7 +82,6 @@ class Telefono:
             print(f"{self.nombre} ha sido desbloqueado.")
         else:
             print(f"{self.nombre} ya está desbloqueado.")
-    
     def activar_modo_avion(self):
         """Activa el modo avión. Desactiva la red móvil y, si está activado, desactiva los datos.
         
@@ -121,9 +116,19 @@ class Telefono:
             self.configuracion.desactivar_datos()
             
     def modo_avion(self):
-       return self.configuracion.modo_avion()    
+        """Devuelve el estado del modo avion(la red).
+
+        Returns:
+            bool: True si esta en modo avion, False de lo contrario.
+        """
+        return self.configuracion.modo_avion()    
    
     def datos_activos(self):
+        """Devuelve el estado de los datos moviles.
+
+        Returns:
+            bool: _description_
+        """
         return self.configuracion.datos_activos_conf()
     
     def abrir_aplicacion(self, nombre_app):
@@ -284,12 +289,30 @@ class Telefono:
             print ("El teléfono debe estar encendido y desbloqueado para ver el historial de sms enviados")
     
     def validar_encendido(self):
+        """Para validar que el telefono esta encendido.
+
+        Returns:
+            bool: True si el telefono esta encendido, False de lo contrario.
+        """
         return self.encendido
     
     def validar_desbloqueado(self):
+        """Para validar que el telefono esta desbloqueado.
+
+        Returns:
+            bool: True si esta desbloqueado, False de lo contrario.
+        """
         return not self.bloqueado
     
     def validar_numero_telefono(self, numero):
+        """Valida que un numero de telefono sea correcto.
+
+        Args:
+            numero (int): Numero de telefono a validar.
+
+        Returns:
+            bool: True si el numero es valido, False de lo contrario.
+        """
         return len(str(numero)) == 10  # Ejemplo simple de validación
     
     def ver_mails(self, orden="no leídos primeros"):

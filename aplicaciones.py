@@ -234,25 +234,7 @@ class Mail():
             for cosa in correos:
                 print((cosa))
                 
-            
 
-# Lo que iria en el main de parte MAIL:
-# telefono1 = Telefono( "iPhone", "12 Pro", "iOS", "14.5", 6, 128, 1234567890)
-def generar_correos():
-    correos = []  # Lista vacía para almacenar los correos
-    for _ in range(20):
-        mensaje = f"Mensaje {_ + 1}"  # Mensaje único
-        estado = random.choice(['leido', 'no leido'])  # Estado aleatorio
-        fecha = datetime.datetime(random.randint(1990,2024),random.randint(1,12), random.randint(1,25), random.randint(0,23), random.randint(0,59))
-        correo = [mensaje, fecha, estado]  # Formato del correo
-        correos.append(correo)
-    return correos
-
-# print(telefono1.encendido_y_desbloqueado())  PROBLEMA: aunque no este prendido o desbloq me muestra los mails
-# # if telefono1.encendido_y_desbloqueado():
-# telefono1.mail.bandeja  = generar_correos()
-# telefono1.ver_mails('no leidos primero')
-# telefono1.ver_mails('por fecha')
 
 class Llamada:
     """
@@ -265,7 +247,8 @@ class Llamada:
 
         Args:
             numero (int): Numero al que se le realiza la llamada.
-
+        
+        Returns: None.
         """
         self.historial_llamadas.insertar((numero, datetime.now(), "saliente"))
     
@@ -301,6 +284,8 @@ class Mensajeria:
         Args:
             destino (int): Numero de destino.
             contenido (int): Numero de contenido.
+        
+        Returns: None.
         """
         self.historial_sms_enviados.push((destino, contenido, datetime.now()))
         
@@ -338,8 +323,3 @@ class Mensajeria:
         """
         return list(self.historial_sms_enviados.items)
 
-##### HACER APLICACION LLAMADA #####
-
-
-
-##### HACER ALPLICACION MENSAJES #####
