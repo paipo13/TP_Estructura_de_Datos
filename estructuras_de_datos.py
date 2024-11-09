@@ -37,10 +37,10 @@ class Pila:
     def __init__(self):
         self.items = []
     
-    def push(self, item):
+    def push(self, item):# mete cosas en la pila 
         self.items.append(item)
     
-    def pop(self):
+    def pop(self):# saca cosas en la pila 
         return self.items.pop()
     
     def esta_vacia(self):
@@ -50,10 +50,10 @@ class Cola:
     def __init__(self):
         self.items = []
     
-    def enqueue(self, item):
+    def enqueue(self, item):    # mete cosas en la cola 
         self.items.insert(0, item)
     
-    def dequeue(self):
+    def dequeue(self):# sca cosas en la cola 
         return self.items.pop()
     
     def esta_vacia(self):

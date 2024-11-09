@@ -206,7 +206,6 @@ class Configuracion():
         self.nombre_telefono = nuevo_nombre
         print(f"Nombre cambiado a {self.nombre_telefono}")
 
-
 class Mail():
     """
     Clase que representa un correo electrónico.
@@ -234,8 +233,6 @@ class Mail():
             for cosa in correos:
                 print((cosa))
                 
-
-
 class Llamada:
     """
     Clase que representa una app de llamadas.
