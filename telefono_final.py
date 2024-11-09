@@ -211,9 +211,9 @@ class Telefono:
         """
         self.mensajeria.recibir_mensaje(origen,contenido)
     
-    def eliminar_mensaje(self):
+    def eliminar_mensaje(self, posicion):
         ################################################################CHEQUEAR ESTO 
-        self.mensajeria.eliminar_mensaje()
+        self.mensajeria.eliminar_mensaje(posicion)
     
     def realizar_llamada(self, numero):
         """Simula la realizacion de una llamada.

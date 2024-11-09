@@ -132,7 +132,13 @@ def main():
         print(f"Bandeja de entrada de SMS de {telefono.nombre_telefono()}:")
         print(telefono.ver_bandeja_entrada_sms())
         print()
-
+        
+    # Eliminacion de mensajes.
+    print('Eliminacion de mensaje:')
+    telefono4.eliminar_mensaje(50)
+    telefono4.eliminar_mensaje(0)    
+    print()
+    
     # Activar modo avión en un teléfono
     telefono2.activar_modo_avion()
     # central.actualizar_modo_avion(telefono2.numero, True)

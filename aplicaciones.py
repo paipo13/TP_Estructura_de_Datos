@@ -1,6 +1,7 @@
 import csv
 from estructuras_de_datos import *
 from datetime import datetime
+from collections import deque
 import random
 class App():
     """
@@ -272,8 +273,8 @@ class Mensajeria:
     Clase que representa una app de mensajes.
     """
     def __init__(self):
-        self.bandeja_entrada_sms = Cola()
-        self.historial_sms_enviados = Pila()
+        self.bandeja_entrada_sms = deque()    ### cola -- añade al final, sale el primero 
+        self.historial_sms_enviados = deque()   ### pila -- añade al final, sale el ultimo
     
     def enviar_mensaje(self, destino, contenido):
         """Simula enviado de mensaje a otro telefono. 
@@ -284,7 +285,7 @@ class Mensajeria:
         
         Returns: None.
         """
-        self.historial_sms_enviados.push((destino, contenido, datetime.now()))
+        self.historial_sms_enviados.append((destino, contenido, datetime.now()))
         
     def recibir_mensaje(self, origen, contenido):
         """Simula el recibimiento de un mensaje. 
@@ -295,14 +296,25 @@ class Mensajeria:
             
         Devuelve: None
         """
-        self.bandeja_entrada_sms.enqueue((origen, contenido, datetime.now()))
+        self.bandeja_entrada_sms.append((origen, contenido, datetime.now()))
         
-    def eliminar_mensaje(self):
-        ################################################################CHEQUEAR ESTO 
-        if not self.bandeja_entrada_sms.esta_vacia():
-            return self.bandeja_entrada_sms.dequeue()
+    def eliminar_mensaje(self, posicion):
+        lista = list(self.bandeja_entrada_sms)
+        if posicion < len(lista):
+        
+            for i in range(len(lista)):
+                if i == posicion:
+                    print(f"El mensaje {lista[i]} ha sido eliminado")
+                    del lista[i]
+            self.bandeja_entrada_sms = deque(lista)
         else:
-            print ("No hay mensajes para eliminar")
+            print(f"No se puede eliminar un mensaje en la posicion {posicion}, esa posicion no existe.")
+        ################################################################CHEQUEAR ESTO 
+        # if not self.bandeja_entrada_sms.esta_vacia():
+        #     return self.bandeja_entrada_sms.dequeue()
+        # else:
+        #     print ("No hay mensajes para eliminar")
+        pass
             
     def ver_bandeja_entrada_sms(self):
         """Devuelve la bandeja de entrada de sms como lista. 
@@ -310,7 +322,7 @@ class Mensajeria:
         Returns:
             list: Una lista con todos los mensajes recibidos de sms.
         """
-        return list(self.bandeja_entrada_sms.items)
+        return list(self.bandeja_entrada_sms)
     
     def ver_historial_sms_enviados(self):
         """Devuelve el historial de mensajes sms enviados como lista.
@@ -318,5 +330,5 @@ class Mensajeria:
         Returns:
             list: Una lista con todos los mensajes enviados de sms.
         """
-        return list(self.historial_sms_enviados.items)
+        return list(self.historial_sms_enviado)
 
