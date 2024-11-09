@@ -157,7 +157,7 @@ class Telefono:
         else:
             print ("No se pueden agregar contactos. El teléfono debe estar encendido y desbloqueado.")
     
-    def actualizar_contacto(self, nombre, nuevo_numero): #Metodo para actualizar un contacto, es decir actualizar el numero de un usuario.
+    def actualizar_contacto(self, nombre, nuevo_numero): #Metodo para actualizar un contacto, es decir actualizar el numero de un usuario. Cabe destaccar que cuando agregarmos contactos damos por sentado que el usuario pone nombres distintos a los usuarios...
         """Actualiza el numero de telefono de un contacto si esta dentro se los contactos del telefono.
 
         Args:

@@ -18,7 +18,7 @@ def generar_correos():
 def main():
     central = Central()
     
-    # Crear teléfonos
+    # Crear teléfonos, Obs. Como indica el enunciado trabajaremos con una central...
     telefono1 = Telefono( "iPhone", "12 Pro", "iOS", "14.5", 6, 128, 1234567890, central)
     telefono2 = Telefono( "Samsung", "Galaxy S21", "Android", "11", 8, 256, 9876543210, central)
     telefono3 = Telefono( "Google", "Pixel 5", "Android", "12", 8, 128, 5555555555, central)
@@ -33,8 +33,8 @@ def main():
     telefono1.cambiar_nombre_telefono("iphone_de_nico")
     print(telefono1.nombre_telefono())
 
-    print(telefono1.id)
-    # Data para graficos de Matplotlib
+    print(telefono1.id) #id generado con "uuid.uuid4()". Unico. Para fines practivos de todas formas estaremos refiriendonos a los telefonos por el numero.
+    # Data para graficos de Matplotlib:
     diccionario_grafico = {}
     for telefono in [telefono1, telefono2, telefono3, telefono4]:
         agregar_datos_diccionario(diccionario_grafico,telefono.sistema_operativo)
@@ -152,18 +152,7 @@ def main():
         print(f"No se pudo realizar la llamada de {telefono1.nombre_telefono()} a {telefono4.nombre_telefono()} (teléfono ocupado)")
     print()
 
-    # # Mostrar emails (simulado)
-    # print(f"Emails de {telefono1.nombre_telefono()}:")
-    # emails_simulados = [
-    #     ("sender1@example.com", "Asunto 1", "Contenido del email 1", datetime.now() - timedelta(days=1)),
-    #     ("sender2@example.com", "Asunto 2", "Contenido del email 2", datetime.now() - timedelta(hours=5)),
-    #     ("sender3@example.com", "Asunto 3", "Contenido del email 3", datetime.now() - timedelta(minutes=30))
-    # ]
-    # for email in emails_simulados:
-    #     telefono1.recibir_email(*email)
-    # print(telefono1.ver_emails("no leídos primeros"))
-    # print(telefono1.ver_emails("por fecha"))
-    # print()
+ 
     telefono1.activar_datos()
     telefono2.desactivar_datos()
     #Descargar app exitosamente

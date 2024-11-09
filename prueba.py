@@ -27,3 +27,4 @@ if id == id1 or id == id2:
     print("Los ids son iguales")
 else:
     print("Los ids son diferentes")
+    
