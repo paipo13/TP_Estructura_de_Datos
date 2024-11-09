@@ -7,6 +7,7 @@ from central import *
 class Telefono:
     """Clase que representa un telefono celular con sus acciones incorporadas.
     """
+    numeros_existentes=set()
     def __init__(self, nombre, modelo, sistema_operativo, version, ram, almacenamiento, numero, central):
         """Inicializa un telefono con un numero y atributos proporcionados.
 
@@ -18,7 +19,9 @@ class Telefono:
             ram (int): La ram del telefono.
             almacenamiento (int): El almacenamiento del telefono.
             numero (int): El numero del telefono.
+            central (Central): La central de llamadas del telefono.
         """
+        Telefono.validar_numero_unico(numero)
         self.id = uuid.uuid4()
         self.nombre = nombre
         self.modelo = modelo
@@ -30,7 +33,7 @@ class Telefono:
         self.encendido = False
         self.bloqueado = True
         self.central= central
-        
+            
         # Y Nuestros componentes internos (del telefono) van a ser...
         self.contactos = set()
         self.mensajeria=Mensajeria()
@@ -40,6 +43,12 @@ class Telefono:
         self.mail = Mail()
         self.paint = Paint()
 
+    def validar_numero_unico(numero):
+        """Verifica que el numero no este ya en uso."""
+        if numero in Telefono.numeros_existentes:
+            raise ValueError("El número de teléfono ya está en uso.")
+        else:
+            Telefono.numeros_existentes.add(numero)
     def encendido_y_desbloqueado(self):   # devuelve True si el teléfono está encendido y desbloqueado
         """Devuelve el estado encendido y desbloqueado juntos.
 

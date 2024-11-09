@@ -19,10 +19,30 @@ def main():
     central = Central()
     
     # Crear teléfonos, Obs. Como indica el enunciado trabajaremos con una central...
-    telefono1 = Telefono( "iPhone", "12 Pro", "iOS", "14.5", 6, 128, 1234567890, central)
-    telefono2 = Telefono( "Samsung", "Galaxy S21", "Android", "11", 8, 256, 9876543210, central)
-    telefono3 = Telefono( "Google", "Pixel 5", "Android", "12", 8, 128, 5555555555, central)
-    telefono4 = Telefono( "Xiaomi", "Mi 11", "Android", "11", 8, 256, 1112223333, central)
+    try:
+        telefono1 = Telefono( "iPhone", "12 Pro", "iOS", "14.5", 6, 128, 1234567890, central)
+    except ValueError as e:
+        print(f"Error creando telefono: {e}")
+    
+    try:
+        telefono2 = Telefono( "Samsung", "Galaxy S21", "Android", "11", 8, 256, 9876543210, central)
+    except ValueError as e:
+        print(f"Error creando telefono: {e}")
+        
+    try:
+        telefono3 = Telefono( "Google", "Pixel 5", "Android", "12", 8, 128, 5555555555, central)
+    except ValueError as e:
+        print(f"Error creando telefono: {e}")
+    
+    try:
+        telefono4 = Telefono( "Xiaomi", "Mi 11", "Android", "11", 8, 256, 1112223333, central)
+    except ValueError as e:
+        print(f"Error creando telefono: {e}")
+    # Simulando error por numero de telefono ya existente.
+    try:
+        telefono5= Telefono("Motorola","M15", "Android","11", 8, 128, 5555555555, central)
+    except ValueError as e:
+        print(f"Error creando telefono: {e}")
     
 
     #cambio nombre telefono 
