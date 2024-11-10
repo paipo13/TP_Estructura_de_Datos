@@ -7,6 +7,11 @@ from telefono_final import *
 import random , datetime
 
 def generar_correos():
+    """Genere una lista de 20 correos electronicos con el formato correspondiente.
+
+    Returns:
+        list: Una lista de listas con los 20 correos dentro.
+    """
     correos = []  # Lista vacía para almacenar los correos
     for _ in range(20):
         mensaje = f"Mensaje {_ + 1}"  # Mensaje único

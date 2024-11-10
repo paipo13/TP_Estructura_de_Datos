@@ -248,7 +248,7 @@ class Llamada:
         
         Returns: None.
         """
-        self.historial_llamadas.insertar((numero, datetime.now(), "saliente"))
+        self.historial_llamadas.insertar((numero, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "saliente"))
     
     def recibir_llamada(self, numero):
         """Simula el recibimiento de una llamada.
@@ -258,7 +258,7 @@ class Llamada:
             
         Returns: None.
         """
-        self.historial_llamadas.insertar((numero, datetime.now(), "entrante"))
+        self.historial_llamadas.insertar((numero, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "entrante"))
         
     def ver_historial_llamadas(self):
         """Devuelve el historial de llamadas del telefono como lista.
@@ -296,9 +296,16 @@ class Mensajeria:
             
         Devuelve: None
         """
-        self.bandeja_entrada_sms.append((origen, contenido, datetime.now()))
+        self.bandeja_entrada_sms.append((origen, contenido, datetime.now().strftime("%Y-%m-%d %H:%M:%S") ))
         
     def eliminar_mensaje(self, posicion):
+        """Elimina un mensaje de sms del telefono ingresando como parametro la posicion de ese mensaje.
+
+        Args:
+            posicion (int): La posicion del mensaje que se quiere eliminar.
+            
+        Returns: None 
+        """
         lista = list(self.bandeja_entrada_sms)
         if posicion < len(lista):
         
@@ -309,12 +316,6 @@ class Mensajeria:
             self.bandeja_entrada_sms = deque(lista)
         else:
             print(f"No se puede eliminar un mensaje en la posicion {posicion}, esa posicion no existe.")
-        ################################################################CHEQUEAR ESTO 
-        # if not self.bandeja_entrada_sms.esta_vacia():
-        #     return self.bandeja_entrada_sms.dequeue()
-        # else:
-        #     print ("No hay mensajes para eliminar")
-        pass
             
     def ver_bandeja_entrada_sms(self):
         """Devuelve la bandeja de entrada de sms como lista. 

@@ -123,7 +123,6 @@ class Telefono:
         """
         if self.encendido_y_desbloqueado():
             self.configuracion.desactivar_datos()
-            
     def modo_avion(self):
         """Devuelve el estado del modo avion(la red).
 
@@ -131,7 +130,6 @@ class Telefono:
             bool: True si esta en modo avion, False de lo contrario.
         """
         return self.configuracion.modo_avion()    
-   
     def datos_activos(self):
         """Devuelve el estado de los datos moviles.
 
@@ -139,7 +137,6 @@ class Telefono:
             bool: _description_
         """
         return self.configuracion.datos_activos_conf()
-    
     def abrir_aplicacion(self, nombre_app):
         if self.encendido_y_desbloqueado():
             if nombre_app in self.appstore.apps_descargadas:
@@ -148,7 +145,6 @@ class Telefono:
                 print ("Aplicación no encontrada")
         else:
             print ("El teléfono debe estar encendido y desbloqueado para abrir aplicaciones")
-    
     def agregar_contacto(self, nombre, numero):
         """Agrega un contacto a los contactos del telefono.
 
@@ -165,7 +161,6 @@ class Telefono:
                 print ("Número de teléfono inválido")
         else:
             print ("No se pueden agregar contactos. El teléfono debe estar encendido y desbloqueado.")
-    
     def actualizar_contacto(self, nombre, nuevo_numero): #Metodo para actualizar un contacto, es decir actualizar el numero de un usuario. Cabe destaccar que cuando agregarmos contactos damos por sentado que el usuario pone nombres distintos a los usuarios...
         """Actualiza el numero de telefono de un contacto si esta dentro se los contactos del telefono.
 
@@ -184,7 +179,6 @@ class Telefono:
             print ("Contacto no encontrado")
         else:
             print ("No se pueden actualizar contactos. El teléfono debe estar encendido y desbloqueado.")
-    
     def enviar_mensaje(self, destino, contenido):
         """Simula enviado de mensaje a otro telefono. 
 
@@ -199,7 +193,6 @@ class Telefono:
             self.mensajeria.enviar_mensaje(destino,contenido)
             return True
         return False
-    
     def recibir_mensaje(self, origen, contenido):
         """Simula el recibimiento de un mensaje. 
 
@@ -210,11 +203,15 @@ class Telefono:
         Devuelve: None
         """
         self.mensajeria.recibir_mensaje(origen,contenido)
-    
     def eliminar_mensaje(self, posicion):
-        ################################################################CHEQUEAR ESTO 
+        """Elimina un mensaje del telefono ingresando como parametro la posicion de este.
+
+        Args:
+            posicion (int): Posicion del mensaje a eliminar.
+        
+        Returns: None.
+        """
         self.mensajeria.eliminar_mensaje(posicion)
-    
     def realizar_llamada(self, numero):
         """Simula la realizacion de una llamada.
 
@@ -228,7 +225,6 @@ class Telefono:
             self.app_llamada.realizar_llamada(numero)
             return True
         return False
-    
     def recibir_llamada(self, numero):
         """Simula el recibimiento de una llamada.
 
@@ -238,7 +234,6 @@ class Telefono:
         Returns: None.
         """
         self.app_llamada.recibir_llamada(numero)
-        
     def descargar_app(self,name):
         """Simula el descargado de una app en el telefono usando la appstore.
 
@@ -263,7 +258,6 @@ class Telefono:
             self.appstore.eliminar_app(name)
         else:
             print('No se ha podido eliminar la app, debe tener telefono encendido y desbloqueado.')
-
     def ver_historial_llamadas(self):
         """Devuelve el historial de llamadas del telefono como lista.
 
@@ -274,7 +268,6 @@ class Telefono:
             return self.app_llamada.ver_historial_llamadas()
         else:
             print ("El teléfono debe estar encendido y desbloqueado para ver el historial de llamadas")
-    
     def ver_bandeja_entrada_sms(self):
         """Devuelve la bandeja de entrada de sms como lista. 
 
@@ -285,7 +278,6 @@ class Telefono:
             return self.mensajeria.ver_bandeja_entrada_sms()
         else:
             print ("El teléfono debe estar encendido y desbloqueado para ver la bandeja de entrada de sms")
-    
     def ver_historial_sms_enviados(self):
         """Devuelve el historial de mensajes sms enviados como lista.
 
@@ -296,7 +288,6 @@ class Telefono:
             return self.mensajeria.ver_historial_sms_enviados()
         else:
             print ("El teléfono debe estar encendido y desbloqueado para ver el historial de sms enviados")
-    
     def validar_encendido(self):
         """Para validar que el telefono esta encendido.
 
@@ -304,7 +295,6 @@ class Telefono:
             bool: True si el telefono esta encendido, False de lo contrario.
         """
         return self.encendido
-    
     def validar_desbloqueado(self):
         """Para validar que el telefono esta desbloqueado.
 
@@ -312,7 +302,6 @@ class Telefono:
             bool: True si esta desbloqueado, False de lo contrario.
         """
         return not self.bloqueado
-    
     def validar_numero_telefono(self, numero):
         """Valida que un numero de telefono sea correcto.
 
@@ -323,7 +312,6 @@ class Telefono:
             bool: True si el numero es valido, False de lo contrario.
         """
         return len(str(numero)) == 10  # Ejemplo simple de validación
-    
     def ver_mails(self, orden="no leídos primeros"):
         """Muestra los mails que tiene el telefono por pantalla teniendo en cuenta un orden.
 
@@ -336,7 +324,6 @@ class Telefono:
             self.mail.ver_mails(orden)
         else:
             print ("El teléfono debe estar encendido y desbloqueado para ver los mails")
-
     def cambiar_nombre_telefono(self,nuevo_nombre_telefono):
         """Cambia el nombre del telefono.
 
@@ -349,11 +336,9 @@ class Telefono:
             self.configuracion.cambiar_nombre(nuevo_nombre_telefono)
         else:
             print ("El teléfono debe estar encendido y desbloqueado para cambiar el nombre")
-    
     def nombre_telefono(self):
         '''Devuelve el nombre del telefono en el momento de ejecucion.'''
         return self.configuracion.nombre_telefono
-    
     def usar_paint(self):
         """Simula el uso de la app paint para dibujar en el telefono.
         """
