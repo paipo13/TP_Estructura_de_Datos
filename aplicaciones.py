@@ -240,25 +240,27 @@ class Llamada:
     """
     def __init__(self):
         self.historial_llamadas = ListaEnlazada()
-    def realizar_llamada(self, numero):
+    def realizar_llamada(self, numero, tiempo):
         """Simula la realizacion de una llamada.
 
         Args:
             numero (int): Numero al que se le realiza la llamada.
+            tiempo (datetime): Momento en el que se realiza la llamada.
         
         Returns: None.
         """
-        self.historial_llamadas.insertar((numero, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "saliente"))
+        self.historial_llamadas.insertar((numero, tiempo, "saliente"))
     
-    def recibir_llamada(self, numero):
+    def recibir_llamada(self, numero, tiempo):
         """Simula el recibimiento de una llamada.
 
         Args:
             numero (int): Numero del cual recibo la llamada.
+            tiempo (datetime): Momento en el que se realiza la llamada.
             
         Returns: None.
         """
-        self.historial_llamadas.insertar((numero, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "entrante"))
+        self.historial_llamadas.insertar((numero, tiempo, "entrante"))
         
     def ver_historial_llamadas(self):
         """Devuelve el historial de llamadas del telefono como lista.
@@ -276,27 +278,29 @@ class Mensajeria:
         self.bandeja_entrada_sms = deque()    ### cola -- añade al final, sale el primero 
         self.historial_sms_enviados = deque()   ### pila -- añade al final, sale el ultimo
     
-    def enviar_mensaje(self, destino, contenido):
+    def enviar_mensaje(self, destino, contenido, tiempo):
         """Simula enviado de mensaje a otro telefono. 
 
         Args:
             destino (int): Numero de destino.
             contenido (int): Numero de contenido.
+            tiempo (datetime): Momento en el que se manda el mensaje.
         
         Returns: None.
         """
-        self.historial_sms_enviados.append((destino, contenido, datetime.now()))
+        self.historial_sms_enviados.append((destino, contenido, tiempo))
         
-    def recibir_mensaje(self, origen, contenido):
+    def recibir_mensaje(self, origen, contenido, tiempo):
         """Simula el recibimiento de un mensaje. 
 
         Args:
             origen (int): Telefono de origen del mensaje.
             contenido (str): Contenido del mensaje.
+            tiempo (datetime): Momento en el que se manda el mensaje.
             
         Devuelve: None
         """
-        self.bandeja_entrada_sms.append((origen, contenido, datetime.now().strftime("%Y-%m-%d %H:%M:%S") ))
+        self.bandeja_entrada_sms.append((origen, contenido, tiempo ))
         
     def eliminar_mensaje(self, posicion):
         """Elimina un mensaje de sms del telefono ingresando como parametro la posicion de ese mensaje.

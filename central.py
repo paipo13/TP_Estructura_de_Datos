@@ -106,6 +106,7 @@ class Central:
         Args:
             origen (int): Numero de origen de llamada.
             destino (int): Numero de destino de llamada.
+            tiempo (datetime): Momento en el que se realiza la llamada. 
             duracion (int): Durecion de la llamada en segundos. 
 
         Returns:
@@ -114,7 +115,7 @@ class Central:
         if self.validar_llamada(origen, destino):
             if Central.determinar_estado_llamada(self,destino, tiempo) == "ocupado": # Aca lo que pasa es que al numero que llamamos esta en llamada por lo que se realiza la llamada pero no se llega a conectar
                 estado = "ocupado"
-                self.telefonos_registrados[origen].realizar_llamada(destino)
+                self.telefonos_registrados[origen].realizar_llamada(destino, tiempo)
                 self.registrar_llamada(origen, destino, duracion, tiempo, estado)
                 return False 
     
@@ -124,8 +125,8 @@ class Central:
                 return False
             estado = self.determinar_estado_llamada(destino, tiempo)
             self.registrar_llamada(origen, destino, duracion, tiempo, estado)
-            self.telefonos_registrados[origen].realizar_llamada(destino)
-            self.telefonos_registrados[destino].recibir_llamada(origen)
+            self.telefonos_registrados[origen].realizar_llamada(destino, tiempo)
+            self.telefonos_registrados[destino].recibir_llamada(origen, tiempo)
             return True
         return False
 
@@ -135,6 +136,7 @@ class Central:
         Args:
             origen (int): Numero de origen del mensaje.
             destino (int): Numero de destino del mensaje.
+            tiempo (datetime): Momento en el que se manda el mensaje.
             contenido (str): Contenido del mensaje.
 
         Returns:
@@ -142,8 +144,8 @@ class Central:
         """
         if self.validar_mensaje(origen, destino):
             self.registrar_mensaje(origen, destino, contenido, tiempo)
-            self.telefonos_registrados[origen].enviar_mensaje(destino, contenido)
-            self.telefonos_registrados[destino].recibir_mensaje(origen, contenido)
+            self.telefonos_registrados[origen].enviar_mensaje(destino, contenido, tiempo)
+            self.telefonos_registrados[destino].recibir_mensaje(origen, contenido, tiempo)
             return True
         return False
     
