@@ -137,14 +137,6 @@ class Telefono:
             bool: _description_
         """
         return self.configuracion.datos_activos_conf()
-    def abrir_aplicacion(self, nombre_app):
-        if self.encendido_y_desbloqueado():
-            if nombre_app in self.appstore.apps_descargadas:
-                return f"Abriendo {nombre_app}"
-            else:
-                print ("Aplicación no encontrada")
-        else:
-            print ("El teléfono debe estar encendido y desbloqueado para abrir aplicaciones")
     def agregar_contacto(self, nombre, numero):
         """Agrega un contacto a los contactos del telefono.
 
