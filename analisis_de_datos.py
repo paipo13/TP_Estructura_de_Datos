@@ -37,7 +37,10 @@ def graficar_torta_llamadas(diccionario_con_data):
     etiquetas = [f'Llamadas de {c} minuto/s' for c in duraciones]
 
     # Normalizar las duraciones para el color (escala de 0 a 1)
-    norm_duraciones = np.array(duraciones) / max(duraciones)
+    try:
+        norm_duraciones = np.array(duraciones) / max(duraciones)
+    except:
+        print("Hubo un error con el grafico de torta.")
 
     # Crear el gráfico de torta
     plt.pie(cantidades, labels=etiquetas, autopct='%1.1f%%', startangle=90, colors=plt.cm.viridis(norm_duraciones))

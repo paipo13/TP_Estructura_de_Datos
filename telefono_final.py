@@ -64,15 +64,18 @@ class Telefono:
         """Enciende el teléfono y activa la red móvil."""
         if not self.encendido:
             self.encendido = True
-            self.desactivar_modo_avion()
             print(f"{self.nombre} ha sido encendido.")
+            self.configuracion.desactivar_modo_avion() 
+            self.central.actualizar_modo_avion(self.numero, False)
+
         else:
             print(f"{self.nombre} ya está encendido.")
     def apagar(self):
         """Apaga el teléfono y desactiva todas las conexiones."""
         if self.encendido:
             self.encendido = False
-            self.activar_modo_avion
+            self.configuracion.activar_modo_avion()
+            self.central.actualizar_modo_avion(self.numero, True)
             self.bloqueado = True
             print(f"{self.nombre} ha sido apagado.")
         else:
@@ -171,7 +174,7 @@ class Telefono:
             print ("Contacto no encontrado")
         else:
             print ("No se pueden actualizar contactos. El teléfono debe estar encendido y desbloqueado.")
-    def enviar_mensaje(self, destino, contenido):
+    def enviar_mensaje(self, destino, contenido, tiempo):
         """Simula enviado de mensaje a otro telefono. 
 
         Args:
@@ -182,10 +185,10 @@ class Telefono:
             bool: True si se pudo enviar el mensaje, False de lo contrario.
         """
         if self.encendido_y_desbloqueado() and not self.modo_avion():
-            self.mensajeria.enviar_mensaje(destino,contenido)
+            self.mensajeria.enviar_mensaje(destino,contenido, tiempo)
             return True
         return False
-    def recibir_mensaje(self, origen, contenido):
+    def recibir_mensaje(self, origen, contenido, tiempo):
         """Simula el recibimiento de un mensaje. 
 
         Args:
@@ -194,7 +197,7 @@ class Telefono:
             
         Devuelve: None
         """
-        self.mensajeria.recibir_mensaje(origen,contenido)
+        self.mensajeria.recibir_mensaje(origen,contenido, tiempo)
     def eliminar_mensaje(self, posicion):
         """Elimina un mensaje del telefono ingresando como parametro la posicion de este.
 
@@ -204,7 +207,7 @@ class Telefono:
         Returns: None.
         """
         self.mensajeria.eliminar_mensaje(posicion)
-    def realizar_llamada(self, numero):
+    def realizar_llamada(self, numero, tiempo):
         """Simula la realizacion de una llamada.
 
         Args:
@@ -214,10 +217,10 @@ class Telefono:
             bool: True si se realizo la llamada, False de lo contrario.
         """
         if self.encendido_y_desbloqueado() and not self.modo_avion():
-            self.app_llamada.realizar_llamada(numero)
+            self.app_llamada.realizar_llamada(numero, tiempo)
             return True
         return False
-    def recibir_llamada(self, numero):
+    def recibir_llamada(self, numero, tiempo):
         """Simula el recibimiento de una llamada.
 
         Args:
@@ -225,7 +228,7 @@ class Telefono:
             
         Returns: None.
         """
-        self.app_llamada.recibir_llamada(numero)
+        self.app_llamada.recibir_llamada(numero, tiempo)
     def descargar_app(self,name):
         """Simula el descargado de una app en el telefono usando la appstore.
 

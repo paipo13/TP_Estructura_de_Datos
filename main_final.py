@@ -62,13 +62,14 @@ def main():
     # Data para graficos de Matplotlib:
     diccionario_grafico = {}
     for telefono in [telefono1, telefono2, telefono3, telefono4]:
-        agregar_datos_diccionario(diccionario_grafico,telefono.sistema_operativo)
+        agregar_datos_diccionario(diccionario_grafico,telefono.sistema_operativo) # Se usara mas abajo para el analisis de datos.
 
 
     # Registrar teléfonos en la central
     for telefono in [telefono1, telefono2, telefono3, telefono4]:
         central.registrar_telefono(telefono)
         print(f"Teléfono registrado: {telefono.nombre_telefono()} {telefono.modelo} ({telefono.numero})")
+    print("Telefonos registrados en la central:\n",list(central.telefonos_registrados))
     print()
 
     # Encender y desbloquear teléfonos
@@ -80,17 +81,16 @@ def main():
     
     # Agregar contactos
     contactos = [
-        (telefono1, "Alice", 9876543210),
-        (telefono1, "Bob", 5555555555),
+        (telefono1, "Ninfa", 9876543210),
+        (telefono1, "Franco", 5555555555),
         (telefono2, "Charlie", 1234567890),
-        (telefono3, "David", 1112223333),
-        (telefono4, "Eve", 1234567890)
+        (telefono3, "Facu Lassarre ;)", 1112223333),
+        (telefono4, "Gustavo", 1234567890)
     ]
     for telefono, nombre, numero in contactos:
         telefono.agregar_contacto(nombre, numero)
         print(f"Contacto {nombre} agregado a {telefono.nombre_telefono()}")
     print()
-
     # Realizar llamadas
     llamadas = [
         (telefono1, telefono2, 60),

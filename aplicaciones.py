@@ -124,7 +124,7 @@ class Configuracion():
         Parámetros:
             nombre (str): El nombre del teléfono.
         """
-        self.red_movil = True
+        self.red_movil = False
         self.datos_activos = False
         self.nombre_telefono = nombre
     
@@ -254,7 +254,7 @@ class Llamada:
         
         Returns: None.
         """
-        self.historial_llamadas.insertar((numero, tiempo, "saliente"))
+        self.historial_llamadas.insertar((numero, tiempo.strftime('%Y-%m-%d %H:%M:%S'), "saliente"))
     
     def recibir_llamada(self, numero, tiempo):
         """Simula el recibimiento de una llamada.
@@ -265,7 +265,7 @@ class Llamada:
             
         Returns: None.
         """
-        self.historial_llamadas.insertar((numero, tiempo, "entrante"))
+        self.historial_llamadas.insertar((numero, tiempo.strftime('%Y-%m-%d %H:%M:%S'), "entrante"))
         
     def ver_historial_llamadas(self):
         """Devuelve el historial de llamadas del telefono como lista.
@@ -293,7 +293,7 @@ class Mensajeria:
         
         Returns: None.
         """
-        self.historial_sms_enviados.append((destino, contenido, tiempo))
+        self.historial_sms_enviados.append((destino, contenido, tiempo.strftime('%Y-%m-%d %H:%M:%S')))
         
     def recibir_mensaje(self, origen, contenido, tiempo):
         """Simula el recibimiento de un mensaje. 
@@ -305,7 +305,7 @@ class Mensajeria:
             
         Devuelve: None
         """
-        self.bandeja_entrada_sms.append((origen, contenido, tiempo ))
+        self.bandeja_entrada_sms.append((origen, contenido, tiempo.strftime('%Y-%m-%d %H:%M:%S') ))
         
     def eliminar_mensaje(self, posicion):
         """Elimina un mensaje de sms del telefono ingresando como parametro la posicion de ese mensaje.

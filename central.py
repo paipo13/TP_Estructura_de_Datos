@@ -39,7 +39,7 @@ class Central:
         Returns: None.
         """
         self.telefonos_registrados[telefono.numero] = telefono
-        self.telefono_modo_avion[telefono.numero] = False
+        self.telefono_modo_avion[telefono.numero] = telefono.modo_avion()
     
     def desregistrar_telefono(self, telefono):
         """Desregistra un telefono de la central 
@@ -223,14 +223,14 @@ class Central:
         """
         print("Registro de llamadas:")
         ruta_archivo = os.path.join('datos', 'llamadas.csv')
-        with open(ruta_archivo, 'r') as file:
+        with open(ruta_archivo, 'r', encoding= 'utf-8') as file:
             reader = csv.reader(file)
             for row in reader:
                 print(row)
         
         print("\nRegistro de mensajes:")
         ruta_archivo = os.path.join('datos', 'mensajes.csv')
-        with open(ruta_archivo, 'r') as file:
+        with open(ruta_archivo, 'r', encoding= 'utf-8') as file:
             reader = csv.reader(file)
             for row in reader:
                 print(row)

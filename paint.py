@@ -3,6 +3,7 @@ class Paint:
     def __init__(self):
         self.nombre='Paint'
     def dibujar(self):
+        """ Permite dibujar por pantalla."""
         pygame.init()
         p_ancho=600
         p_alto=600
