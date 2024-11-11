@@ -5,6 +5,11 @@ import os
 #MATPLOTLIB
 
 def maquinita_de_ayuda():
+    """ Nos sirve para el grafico de torta. Trae la informacion de los archivos 'datos' y la pasa a un diccionario que luego sera leido por graficar_torta_llamadas.
+
+    Returns:
+        data (dict): Diccionario con la informacion para el grafico de barra. 
+    """
     data = {}
     ruta_archivo = os.path.join('datos', 'llamadas.csv')
     if not os.path.exists(ruta_archivo):
@@ -26,6 +31,11 @@ def maquinita_de_ayuda():
 # import numpy as np
 
 def graficar_torta_llamadas(diccionario_con_data):
+    """Grafica de Torta para poner en porcentajes la cantidad de llamadas agrupadas por las duraciones (en min) de estas
+
+    Args:
+        data (dict): Diccionario con la informacion para el grafico de barra.
+    """
     duraciones = list(diccionario_con_data.keys())
     cantidades = list(diccionario_con_data.values())
     # Validamos que ambas listas tengan la misma longitud
@@ -55,6 +65,11 @@ def graficar_torta_llamadas(diccionario_con_data):
     plt.show()
 
 def grafico_barras(data):
+    """_summary_
+
+    Args:
+        data (dict): Diccionario con la informacion para el grafico de barra.
+    """
     # data debería ser un diccionario con sistemas operativos como clave y cantidad como valor
     sistemas = list(data.keys())
     cantidades = list(data.values())
