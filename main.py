@@ -2,8 +2,7 @@ from analisis_de_datos import *
 from aplicaciones import *
 from central import *
 from estructuras_de_datos import *
-from telefono_final import *
-
+from telefono import *
 import random , datetime
 
 def generar_correos():
