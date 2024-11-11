@@ -64,14 +64,19 @@ class Appstore():
         self.apps=dict()                  #Los diccoinarois facilitan la buisqueda de apps por nombre.
         self.apps_descargadas=dict() 
         titulo=True
-        with open(archivo_data, mode='r', encoding='utf-8') as archivo_csv:
-            lector_csv = csv.reader(archivo_csv)
-            for fila in lector_csv:
-                if titulo:
-                    titulo=False
-                else:
-                    object=App(fila[0],fila[1],fila[2],fila[3],fila[4],fila[5],fila[6],fila[7],fila[8],fila[9],fila[10],fila[11],fila[12])
-                    self.apps[object.nombre_app]=object
+        try:
+            with open(archivo_data, mode='r', encoding='utf-8') as archivo_csv:
+                lector_csv = csv.reader(archivo_csv)
+                for fila in lector_csv:
+                    if titulo:
+                        titulo=False
+                    else:
+                        object=App(fila[0],fila[1],fila[2],fila[3],fila[4],fila[5],fila[6],fila[7],fila[8],fila[9],fila[10],fila[11],fila[12])
+                        self.apps[object.nombre_app]=object
+        except FileNotFoundError:
+            print(f"No se encontró el archivo {archivo_data} para agregar las apps a la appstore.")
+        except:
+            print(f"Error al cargar las apps desde el archivo CSV {archivo_data} a la appstore.")
     def descargar_app(self, nombre_app):
         """
         Descarga una aplicación del appstore.
