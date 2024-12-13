@@ -7,7 +7,7 @@ class App():
     """
     Clase que representa una colección de aplicaciones.
     """
-    def __init__(self,nombre_app,Category,Rating,Reviews,Size,Installs,Type,Price,Content_Rating,Genres,Last_Updated,Current_Ver,Android_Ver):
+    def __init__(self,nombre_app=None,Category=None,Rating=None,Reviews=None,Size=None,Installs=None,Type=None,Price=None,Content_Rating=None,Genres=None,Last_Updated=None,Current_Ver=None,Android_Ver=None):
         """
         Inicializa una app con un nombre y atributos proporcionados.
 
@@ -48,7 +48,7 @@ class App():
         """
         return self.nombre_app
 
-class Appstore():
+class Appstore(App):
     """
     Clase que representa un appstore, que gestiona y proporciona aplicaciones.
     """
@@ -59,8 +59,9 @@ class Appstore():
         Parámetros:
             nombre_app (str): El nombre del appstore.
             archivo_data (str): La ruta al archivo CSV que contiene los datos de las aplicaciones.
+            
         """
-        self.nombre_app=nombre_app
+        super().__init__(nombre_app,Category='App del sistema',Rating=None,Reviews=None,Size='5.3M',Installs=None,Type='Free',Price='0',Content_Rating=None,Genres='App manadgement',Last_Updated='Decembre 25, 2024',Current_Ver='5.0',Android_Ver='7.4 and up')
         self.apps=dict()                  #Los diccoinarois facilitan la buisqueda de apps por nombre.
         self.apps_descargadas=dict() 
         titulo=True
@@ -113,7 +114,7 @@ class Appstore():
             del self.apps_descargadas[nombre_app]
             print(f"Fue eliminada la app {nombre_app}")
 
-class Configuracion():
+class Configuracion(App):
     """
     Clase que representa la configuración del teléfono.
     """
@@ -124,6 +125,7 @@ class Configuracion():
         Parámetros:
             nombre (str): El nombre del teléfono.
         """
+        super().__init__(nombre='Configuracion',Category='App del sistema',Rating=None,Reviews=None,Size='2M',Installs=None,Type=None,Price=None,Content_Rating=None,Genres=None,Last_Updated='August 9, 2024',Current_Ver='4.0',Android_Ver='7.1 and up')
         self.red_movil = False
         self.datos_activos = False
         self.nombre_telefono = nombre
@@ -212,7 +214,7 @@ class Configuracion():
         self.nombre_telefono = nuevo_nombre
         print(f"Nombre cambiado a {self.nombre_telefono}")
 
-class Mail():
+class Mail(App):
     """
     Clase que representa un correo electrónico.
     """
@@ -220,6 +222,7 @@ class Mail():
         """
         Inicializa el correo con una lista vacía de mensajes.
         """
+        super().__init__(nombre='Correo', Category='Messaging', Rating="4.5", Reviews=None, Size='2M', Installs="1,000,000+", Type='Free', Price='0', Content_Rating=None, Genres="Messaging", Last_Updated='October 11, 2024', Current_Ver='4.7', Android_Ver='5.1 and up')
         self.bandeja = []
     def ver_mails(self,orden):
         """Visualiza los mails por pantalla.
@@ -239,11 +242,12 @@ class Mail():
             for cosa in correos:
                 print((cosa))
                 
-class Llamada:
+class Llamada(App):
     """
     Clase que representa una app de llamadas.
     """
     def __init__(self):
+        super().__init__(nombre_app='Llamadas',Category='Communication',Rating=None,Reviews=None,Size="0.5M",Installs=None,Type="Free",Price='0',Content_Rating=None,Genres="Communication",Last_Updated='February 28, 2024',Current_Ver="5.3",Android_Ver="4.7 and up")
         self.historial_llamadas = ListaEnlazada()
     def realizar_llamada(self, numero, tiempo):
         """Simula la realizacion de una llamada.
@@ -275,13 +279,14 @@ class Llamada:
         """
         return list(self.historial_llamadas)
     
-class Mensajeria:
+class Mensajeria(App):
     """
     Clase que representa una app de mensajes.
     """
     def __init__(self):
-        self.bandeja_entrada_sms = deque()    ### cola -- añade al final, sale el primero 
-        self.historial_sms_enviados = deque()   ### pila -- añade al final, sale el ultimo
+        super().__init__(nombre_app='Mensajeria', Category='Messaging', Rating=None, Reviews=None, Size='1.3M', Installs=None, Type='Free', Price='0', Content_Rating=None, Genres="Messaging", Last_Updated='April 24, 2024', Current_Ver="6.3", Android_Ver="5.7 and up")
+        self.bandeja_entrada_sms = deque()    ### pila -- añade al final, sale el ultimo 
+        self.historial_sms_enviados = deque()   ### cola -- añade al final, sale el primero
     
     def enviar_mensaje(self, destino, contenido, tiempo):
         """Simula enviado de mensaje a otro telefono. 
@@ -305,7 +310,7 @@ class Mensajeria:
             
         Devuelve: None
         """
-        self.bandeja_entrada_sms.append((origen, contenido, tiempo.strftime('%Y-%m-%d %H:%M:%S') ))
+        self.bandeja_entrada_sms.appendleft((origen, contenido, tiempo.strftime('%Y-%m-%d %H:%M:%S') ))
         
     def eliminar_mensaje(self, posicion):
         """Elimina un mensaje de sms del telefono ingresando como parametro la posicion de ese mensaje.
@@ -340,5 +345,5 @@ class Mensajeria:
         Returns:
             list: Una lista con todos los mensajes enviados de sms.
         """
-        return list(self.historial_sms_enviado)
+        return list(self.historial_sms_enviados)
 

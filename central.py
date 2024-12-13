@@ -17,18 +17,21 @@ class Central:
         
         Returns: None 
         """
-        if not os.path.exists('datos'):
-            os.makedirs('datos')
-        
-        for archivo in ['llamadas.csv', 'mensajes.csv']:
-            ruta_archivo = os.path.join('datos', archivo)
-            if not os.path.exists(ruta_archivo):
-                with open(ruta_archivo, 'w', newline='') as file:
-                    writer = csv.writer(file)
-                    if archivo == 'llamadas.csv':
-                        writer.writerow(['origen', 'destino', 'duracion', 'tiempo', 'estado'])
-                    else:
-                        writer.writerow(['origen', 'destino', 'contenido', 'tiempo'])
+        try:
+            if not os.path.exists('datos'):
+                os.makedirs('datos')
+            
+            for archivo in ['llamadas.csv', 'mensajes.csv']:
+                ruta_archivo = os.path.join('datos', archivo)
+                if not os.path.exists(ruta_archivo):
+                    with open(ruta_archivo, 'w', newline='') as file:
+                        writer = csv.writer(file)
+                        if archivo == 'llamadas.csv':
+                            writer.writerow(['origen', 'destino', 'duracion', 'tiempo', 'estado'])
+                        else:
+                            writer.writerow(['origen', 'destino', 'contenido', 'tiempo'])
+        except:
+            print("Error inicializando archivos.")
     
     def registrar_telefono(self, telefono):
         """Registra un telefono en la central.
@@ -175,17 +178,20 @@ class Central:
         ruta_archivo = os.path.join('datos', 'llamadas.csv')
         if not os.path.exists(ruta_archivo):
             return None
-        with open(ruta_archivo, 'r') as file:
-            reader = csv.reader(file)
-            next(reader)  # Saltar la fila de encabezados
-            llamadas = list(reader)
-            for llamada in reversed(llamadas): #Da vuelta el ordenamiento
-#                if llamada[1] == str(numero):  # Si el número es el destino de la llamada
-                 if llamada[1] == str(numero) and llamada[4] == "conectado":
-                    tiempo = datetime.strptime(llamada[3], '%Y-%m-%d %H:%M:%S')
-                    duracion = int(llamada[2])
-                    estado = llamada[4]
-                    return tiempo, duracion , estado
+        try:
+            with open(ruta_archivo, 'r') as file:
+                reader = csv.reader(file)
+                next(reader)  # Saltar la fila de encabezados
+                llamadas = list(reader)
+                for llamada in reversed(llamadas): #Da vuelta el ordenamiento
+    #                if llamada[1] == str(numero):  # Si el número es el destino de la llamada
+                    if llamada[1] == str(numero) and llamada[4] == "conectado":
+                        tiempo = datetime.strptime(llamada[3], '%Y-%m-%d %H:%M:%S')
+                        duracion = int(llamada[2])
+                        estado = llamada[4]
+                        return tiempo, duracion , estado
+        except FileNotFoundError:
+            print("Error: No se encontro el archivo llamadas.csv")
         return None
     
     def registrar_llamada(self, origen, destino, duracion, tiempo, estado):
@@ -199,9 +205,12 @@ class Central:
             estado (str): Si se conecto o no se conecto la llamada.
         """
         ruta_archivo = os.path.join('datos', 'llamadas.csv')
-        with open(ruta_archivo, 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow([origen, destino, duracion, tiempo, estado])
+        try:
+            with open(ruta_archivo, 'a', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow([origen, destino, duracion, tiempo, estado])
+        except FileNotFoundError:
+            print("Error: No se encontro el archivo llamadas.csv")
     
     def registrar_mensaje(self, origen, destino, contenido, tiempo):
         """Registra un mensaje, es decir, lo agrega al archivo csv de mensajes.
@@ -213,9 +222,12 @@ class Central:
             tiempo (datetime): Tiempo en el que se mando el mensaje.
         """
         ruta_archivo = os.path.join('datos', 'mensajes.csv')
-        with open(ruta_archivo, 'a', newline='', encoding= 'utf-8') as file:
-            writer = csv.writer(file)
-            writer.writerow([origen, destino, contenido, tiempo])
+        try:
+            with open(ruta_archivo, 'a', newline='', encoding= 'utf-8') as file:
+                writer = csv.writer(file)
+                writer.writerow([origen, destino, contenido, tiempo])
+        except FileNotFoundError:
+            print("Error: No se encontro el archivo mensajes.csv")
     
     def mostrar_registros(self):
         """Muestra por pantalla tanto el registro de llamadas como el de mensajes de la central. 
@@ -223,14 +235,20 @@ class Central:
         """
         print("Registro de llamadas:")
         ruta_archivo = os.path.join('datos', 'llamadas.csv')
-        with open(ruta_archivo, 'r', encoding= 'utf-8') as file:
-            reader = csv.reader(file)
-            for row in reader:
-                print(row)
+        try:
+            with open(ruta_archivo, 'r', encoding= 'utf-8') as file:
+                reader = csv.reader(file)
+                for row in reader:
+                    print(row)
+        except FileNotFoundError:
+            print("Error: No se encontro el archivo llamadas.csv")
         
         print("\nRegistro de mensajes:")
         ruta_archivo = os.path.join('datos', 'mensajes.csv')
-        with open(ruta_archivo, 'r', encoding= 'utf-8') as file:
-            reader = csv.reader(file)
-            for row in reader:
-                print(row)
+        try:
+            with open(ruta_archivo, 'r', encoding= 'utf-8') as file:
+                reader = csv.reader(file)
+                for row in reader:
+                    print(row)
+        except FileNotFoundError:
+            print("Error: No se encontro el archivo mensajes.csv")

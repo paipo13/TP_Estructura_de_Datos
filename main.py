@@ -110,7 +110,11 @@ def main():
         (telefono1, telefono2, "Hola, ¿cómo estás?"),
         (telefono2, telefono3, "¿Nos vemos luego?"),
         (telefono3, telefono4, "Recuerda la reunión de mañana"),
-        (telefono4, telefono1, "Gracias por la información")
+        (telefono4, telefono1, "Gracias por la información"),
+        (telefono2, telefono1, "Bien, vos?"),
+        (telefono1, telefono2, "Bien, Hacemos algo mañana?"),
+        (telefono2, telefono1, "DALEEE!!!"),
+        (telefono1, telefono2, "Buenisimoooooooooooooooo")
     ]
     print("Enviando mensajes:")
     for origen, destino, contenido in mensajes:
@@ -135,6 +139,8 @@ def main():
         print(telefono.ver_historial_llamadas())
         print(f"Bandeja de entrada de SMS de {telefono.nombre_telefono()}:")
         print(telefono.ver_bandeja_entrada_sms())
+        print(f"Historial de mensajes enviados de {telefono.nombre_telefono()}:")
+        print(telefono.ver_historial_sms_enviados())
         print()
         
     # Eliminacion de mensajes.
