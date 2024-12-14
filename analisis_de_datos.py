@@ -90,15 +90,7 @@ def agregar_datos_diccionario(diccionario, clave):
         diccionario[clave] += 1
     else:
         diccionario[clave] = 1
-        
-# import numpy as np
-# import matplotlib.pyplot as plt
 
-# # Suponiendo que cargamos los datos desde el archivo CSV
-# # Los datos se leen y estructuran con numpy
-# import csv
-
-# Leer archivo CSV
 def grafica_de_apps():
     data = []
     try:
@@ -107,45 +99,82 @@ def grafica_de_apps():
             next(reader)
             for row in reader:
                 data.append(row)
-    except FileExistsError:
+    except FileNotFoundError:
         print("No se encontró el archivo Play Store Data.csv.")
+        return
 
-    # Convertir a arrays NumPy para facilitar el procesamiento
-    tipo_apps = np.array([row[6] for row in data])
-    rating_apps = np.array([float(row[2]) for row in data])
-    categorias = np.array([row[1] for row in data])
-    instalaciones = np.array([float((row[5][:-1]).replace(',','')) for row in data])
+    versiones_validas = {"4.0.3 and up", "4.0 and up", "4.1 and up", "4.3 and up", "4.4 and up"}
 
-    # Filtrar datos para 'free' y 'pago'
+    categorias = []
+    ratings = []
+    versiones_android = []
+
+    for row in data:
+        try:
+            categoria = row[1]
+            rating = row[2]
+            version = row[12]
+            
+            if isinstance(rating, str) and rating.lower() == "nan":
+                continue
+            rating = float(rating)
+            if version in versiones_validas:
+                categorias.append(categoria)
+                ratings.append(rating)
+                versiones_android.append(version)
+        except (ValueError, IndexError):
+            continue
+
+    categorias = np.array(categorias)
+    ratings = np.array(ratings)
+    versiones_android = np.array(versiones_android)
+
+    ratings = ratings[~np.isnan(ratings)]  
+
     categorias_unicas = np.unique(categorias)
-    instalaciones_rating_alto = []
-    instalaciones_rating_bajo = []
+    promedios_rating = []
+    version_frecuente = []
 
     for categoria in categorias_unicas:
-        # Sumar instalaciones por categoría y tipo de app
-        suma_rating_alto = np.sum(instalaciones[(categorias == categoria) & (rating_apps >= 4.5)])
-        suma_rating_bajo = np.sum(instalaciones[(categorias == categoria) & (rating_apps < 4.5)])
-        instalaciones_rating_alto.append(suma_rating_alto)
-        instalaciones_rating_bajo.append(suma_rating_bajo)
+        indices = (categorias == categoria)
+        ratings_categoria = ratings[indices]
+        versiones_categoria = versiones_android[indices]
+        
+        if len(ratings_categoria) > 0:
+            promedio = np.mean(ratings_categoria)
+            promedios_rating.append(promedio)
+        else:
+            promedios_rating.append(0)
 
-    # Convertir listas a arrays para graficar
-    instalaciones_rating_alto = np.array(instalaciones_rating_alto)
-    instalaciones_rating_bajo = np.array(instalaciones_rating_bajo)
+        if len(versiones_categoria) > 0:
+            version_comun = np.unique(versiones_categoria, return_counts=True)
+            version_frecuente.append(version_comun[0][np.argmax(version_comun[1])])
+        else:
+            version_frecuente.append("N/A")
 
-    # Crear gráfico de barras agrupadas
+    version_frecuente = [version.replace(" and up", "") for version in version_frecuente]
+
+    # Creamos el gráfico de barras
     x = np.arange(len(categorias_unicas))
-    width = 0.4
+    
+    plt.bar(x, promedios_rating, color=plt.cm.Paired(np.linspace(0, 1, len(categorias_unicas))), edgecolor="black")
 
-    plt.bar(x - width/2, instalaciones_rating_alto, width, label="Rating mayor a 4", color="skyblue")
-    plt.bar(x + width/2, instalaciones_rating_bajo, width, label="Rating menor a 4", color="orange")
+    plt.title("Promedio de Rating por Categoría de Aplicaciones\n(en versiones de Android 4.0 y superiores)", fontsize=16, fontweight='bold', color='darkblue')
+    plt.xticks(x, categorias_unicas, rotation=75, ha="right", fontsize=10)
+    plt.yticks(fontsize=10)
+    plt.xlabel("Categorías", fontsize=12, fontweight='bold')
+    plt.ylabel("Promedio de Rating", fontsize=12, fontweight='bold')
 
-    # Configuración del gráfico
-    plt.xlabel("Categorías")
-    plt.ylabel("Instalaciones")
-    plt.title("Instalaciones por Categoría y Tipo de App")
-    plt.xticks(x, categorias_unicas, rotation=45, ha="right")
-    plt.legend()
+    # Añado la versión más frecuente de Android en las etiquetas
+    for i, v in enumerate(version_frecuente):
+        if promedios_rating[i] > 0:
+            plt.text(i, promedios_rating[i] + 0.1, v, ha="center", fontsize=8, color='darkgreen', fontweight='bold')
 
-    # Mostrar el gráfico
-    plt.tight_layout()
+    
+    plt.ylim(0, 5)
+    # Ajusto el espaciado
+    plt.tight_layout(pad=2.0)
     plt.show()
+
+# Llamar a la función
+grafica_de_apps()

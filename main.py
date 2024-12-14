@@ -224,5 +224,6 @@ def main():
 
     dic_con_info = maquinita_de_ayuda()
     graficar_torta_llamadas(dic_con_info)
+    grafica_de_apps()
 if __name__ == "__main__":
     main()
