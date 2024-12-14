@@ -126,7 +126,6 @@ class Configuracion(App):
             nombre (str): El nombre del teléfono.
         """
         super().__init__(nombre_app='Configuracion',Category='App del sistema',Rating=None,Reviews=None,Size='2M',Installs=None,Type=None,Price=None,Content_Rating=None,Genres=None,Last_Updated='August 9, 2024',Current_Ver='4.0',Android_Ver='7.1 and up')
-        self.nombre=nombre
         self.red_movil = False
         self.datos_activos = False
         self.nombre_telefono = nombre
