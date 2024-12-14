@@ -176,5 +176,3 @@ def grafica_de_apps():
     plt.tight_layout(pad=2.0)
     plt.show()
 
-# Llamar a la función
-grafica_de_apps()

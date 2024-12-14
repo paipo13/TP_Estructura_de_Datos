@@ -125,7 +125,8 @@ class Configuracion(App):
         Parámetros:
             nombre (str): El nombre del teléfono.
         """
-        super().__init__(nombre='Configuracion',Category='App del sistema',Rating=None,Reviews=None,Size='2M',Installs=None,Type=None,Price=None,Content_Rating=None,Genres=None,Last_Updated='August 9, 2024',Current_Ver='4.0',Android_Ver='7.1 and up')
+        super().__init__(nombre_app='Configuracion',Category='App del sistema',Rating=None,Reviews=None,Size='2M',Installs=None,Type=None,Price=None,Content_Rating=None,Genres=None,Last_Updated='August 9, 2024',Current_Ver='4.0',Android_Ver='7.1 and up')
+        self.nombre=nombre
         self.red_movil = False
         self.datos_activos = False
         self.nombre_telefono = nombre
@@ -222,7 +223,7 @@ class Mail(App):
         """
         Inicializa el correo con una lista vacía de mensajes.
         """
-        super().__init__(nombre='Correo', Category='Messaging', Rating="4.5", Reviews=None, Size='2M', Installs="1,000,000+", Type='Free', Price='0', Content_Rating=None, Genres="Messaging", Last_Updated='October 11, 2024', Current_Ver='4.7', Android_Ver='5.1 and up')
+        super().__init__(nombre_app='Correo', Category='Messaging', Rating="4.5", Reviews=None, Size='2M', Installs="1,000,000+", Type='Free', Price='0', Content_Rating=None, Genres="Messaging", Last_Updated='October 11, 2024', Current_Ver='4.7', Android_Ver='5.1 and up')
         self.bandeja = []
     def ver_mails(self,orden):
         """Visualiza los mails por pantalla.
